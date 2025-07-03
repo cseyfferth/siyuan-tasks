@@ -1,20 +1,63 @@
 {
-    "addTopBarIcon": "使用插件添加一个顶栏按钮",
-    "cancel": "取消",
-    "save": "保存",
-    "byeMenu": "再见，菜单！",
-    "helloPlugin": "你好，插件！",
-    "byePlugin": "再见，插件！",
-    "showDialog": "弹出一个对话框",
-    "removedData": "数据已删除",
-    "confirmRemove": "确认删除 ${name} 中的数据？",
-    "insertEmoji": "插入表情",
-    "removeSpace": "移除空格",
-    "getTab": "在日志中打印出已打开的所有自定义页签",
-    "name": "思源",
-    "hello": {
-        "makesure": "使用这个模板之前，请阅读<a href=\"https://github.com/siyuan-note/plugin-sample\">官方教程</a>, 确保自己已经理解了插件的基本开发流程。"
+  "cancel": "取消",
+  "save": "保存",
+  "name": "思源",
+  "dockTitle": "所有任务",
+  "refreshTasks": "刷新任务",
+  "noTasksFound": "未找到任何任务。",
+  "errorFetchingTasks": "获取任务时出错：",
+  "errorFetchingNotebookInfo": "获取任务所在笔记本信息时出错：",
+  "errorFetchingDocumentPath": "获取任务所在文档路径时出错：",
+  "pluginTitle": "任务列表",
+  "options": {
+    "refresh": "刷新",
+    "search": "搜索",
+    "filter": "筛选",
+    "expand": "展开",
+    "collapse": "收起"
+  },
+  "range": {
+    "doc": "文档",
+    "box": "笔记本",
+    "workspace": "工作空间"
+  },
+  "searchPlaceholder": "搜索任务...",
+  "priority": {
+    "urgent": "紧急",
+    "high": "高",
+    "normal": "普通",
+    "low": "低",
+    "none": "无优先级",
+    "indicators": {
+      "urgent": "‼️ (输入 :!!)",
+      "high": "❗ (输入 :!)",
+      "low": "low"
+    }
+  },
+  "setting": {
+    "title": "设置",
+    "autoRefresh": "自动刷新任务",
+    "autoRefreshDesc": "切换文档时自动刷新任务",
+    "refreshInterval": "刷新间隔（秒）",
+    "refreshIntervalDesc": "自动刷新任务的频率。最小值为 5 秒。",
+    "showCompleted": "显示已完成任务",
+    "showCompletedDesc": "在任务列表中包含已完成的任务",
+    "maxTasks": "最大任务显示数量",
+    "maxTasksDesc": "加载和显示的最大任务数量",
+    "sortBy": "排序方式",
+    "sortByDesc": "任务列表的排序方式",
+    "sortOptions": {
+      "created": "创建日期",
+      "updated": "更新日期",
+      "content": "内容",
+      "priority": "优先级"
     },
-    "hintTitle": "关于",
-    "hintDesc": "<a href='https://github.com/siyuan-note/plugin-sample-vite-svelte'>🔗 plugin-sample-vite-svelte</a><br>💻 @frostime<br>💻 @88250<br>💻 @zxkmm"
+    "displayMode": "任务列表显示模式",
+    "displayModeDesc": "任务列表的显示方式",
+    "displayOptions": {
+      "onlyTasks": "仅任务",
+      "notebookDocumentTasks": "笔记本、文档、任务",
+      "notebookTasks": "笔记本、任务"
+    }
+  }
 }

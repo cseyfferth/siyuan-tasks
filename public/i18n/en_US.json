@@ -1,20 +1,63 @@
 {
-    "addTopBarIcon": "Add a top bar icon by plugin",
-    "cancel": "Cancel",
-    "save": "Save",
-    "byeMenu": "Bye, Menu!",
-    "helloPlugin": "Hello, Plugin!",
-    "byePlugin": "Bye, Plugin!",
-    "showDialog": "Show dialog",
-    "removedData": "Data deleted",
-    "confirmRemove": "Confirm to delete the data in ${name}?",
-    "insertEmoji": "Insert Emoji",
-    "removeSpace": "Remove Space",
-    "getTab": "Print out all opened custom tabs in the debugger",
-    "name": "SiYuan",
-    "hello": {
-        "makesure": "Before using this template, please read the <a href=\"https://github.com/siyuan-note/plugin-sample\">offical sample</a>, make sure that you've known about the pipeline for plugin developing."
+  "cancel": "Cancel",
+  "save": "Save",
+  "name": "SiYuan",
+  "dockTitle": "All Tasks",
+  "refreshTasks": "Refresh Tasks",
+  "noTasksFound": "No tasks found.",
+  "errorFetchingTasks": "Error fetching tasks:",
+  "errorFetchingNotebookInfo": "Error fetching notebook info for task:",
+  "errorFetchingDocumentPath": "Error fetching document path for task:",
+  "pluginTitle": "Task List",
+  "options": {
+    "refresh": "Refresh",
+    "search": "Search",
+    "filter": "Filter",
+    "expand": "Expand",
+    "collapse": "Collapse"
+  },
+  "range": {
+    "doc": "Document",
+    "box": "Notebook",
+    "workspace": "Workspace"
+  },
+  "searchPlaceholder": "Search tasks...",
+  "priority": {
+    "urgent": "Urgent",
+    "high": "High",
+    "normal": "Normal",
+    "low": "Low",
+    "none": "No Priority",
+    "indicators": {
+      "urgent": "‼️ (type :!!)",
+      "high": "❗ (type :!)",
+      "low": "low"
+    }
+  },
+  "setting": {
+    "title": "Settings",
+    "autoRefresh": "Auto refresh tasks",
+    "autoRefreshDesc": "Automatically refresh tasks when switching documents",
+    "refreshInterval": "Refresh interval (seconds)",
+    "refreshIntervalDesc": "How often to refresh tasks automatically. Minimum is 5 seconds.",
+    "showCompleted": "Show completed tasks",
+    "showCompletedDesc": "Include completed tasks in the task list",
+    "maxTasks": "Maximum tasks to display",
+    "maxTasksDesc": "Maximum number of tasks to load and display",
+    "sortBy": "Sort by",
+    "sortByDesc": "How to sort tasks in the list",
+    "sortOptions": {
+      "created": "Created date",
+      "updated": "Updated date",
+      "content": "Content",
+      "priority": "Priority"
     },
-    "hintTitle":"About",
-    "hintDesc":"<a href='https://github.com/siyuan-note/plugin-sample-vite-svelte'>plugin-sample-vite-svelte</a><br>@frostime<br>@88250<br>@zxkmm"
+    "displayMode": "Task List Display Mode",
+    "displayModeDesc": "How to display tasks in the list",
+    "displayOptions": {
+      "onlyTasks": "Only Tasks",
+      "notebookDocumentTasks": "Notebook, Document, Tasks",
+      "notebookTasks": "Notebook, Tasks"
+    }
+  }
 }
