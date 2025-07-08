@@ -15,10 +15,6 @@ import { TaskStatus, TaskPriority } from "../types/tasks";
  * - "low" = Low priority (green chevron down)
  * - No indicator = Normal priority (no icon)
  *
- * Example usage:
- * ```typescript
- * const analysis = TaskAnalysisService.analyzeTask("- [ ] ❗ Important task");
- * // Returns: { status: TaskStatus.TODO, priority: TaskPriority.HIGH, text: "Important task", hasPriority: true }
  * ```
  */
 export class TaskAnalysisService {
@@ -40,9 +36,8 @@ export class TaskAnalysisService {
    * Detect task status from markdown
    */
   static detectStatus(markdown: string): TaskStatus {
-    if (this.isTodo(markdown)) return TaskStatus.TODO;
     if (this.isDone(markdown)) return TaskStatus.DONE;
-    return TaskStatus.ALL;
+    return TaskStatus.TODO;
   }
 
   /**
@@ -75,6 +70,9 @@ export class TaskAnalysisService {
   static extractTaskText(taskText: string = ""): string {
     taskText = taskText.replace(/[\u2757\u203c]|\ufe0f/g, "").trim();
 
+    // Convert SiYuan's internal hash tag format from #MyHash# to #MyHash
+    taskText = taskText.replace(/#([^#]+)#/g, "#$1");
+
     return taskText;
   }
 
@@ -83,27 +81,5 @@ export class TaskAnalysisService {
    */
   static hasPriority(markdown: string): boolean {
     return this.detectPriority(markdown) !== TaskPriority.NORMAL;
-  }
-
-  /**
-   * Get all task analysis data from markdown
-   */
-  static analyzeTask(markdown: string): {
-    status: TaskStatus;
-    priority: TaskPriority;
-    text: string;
-    hasPriority: boolean;
-  } {
-    const status = this.detectStatus(markdown);
-    const priority = this.detectPriority(markdown);
-    const text = this.extractTaskText(markdown);
-    const hasPriority = this.hasPriority(markdown);
-
-    return {
-      status,
-      priority,
-      text,
-      hasPriority,
-    };
   }
 }

@@ -1,16 +1,20 @@
+import { SiyuanBlockType } from "@/types/siyuan-enriched";
 import { sql } from "../api";
 import { TaskRange, TaskStatus, DocInfo, BoxInfo } from "../types/tasks";
 import { TaskAnalysisService } from "./task-analysis.service";
 import { RawSiyuanBlock } from "./task-factory.service";
 
-// TODO
+/**
+ * TODO: Limit the number of tasks in case of large number of tasks
+ *
+ */
 export async function fetchTasksFromDB(
   range: TaskRange,
   status: TaskStatus,
   getCurrentDocInfo: () => DocInfo,
   getCurrentBoxInfo: () => BoxInfo
 ): Promise<RawSiyuanBlock[]> {
-  let sqlQuery = "SELECT * FROM blocks WHERE type = 'i' AND subtype = 't'";
+  let sqlQuery = `SELECT * FROM blocks WHERE type = '${SiyuanBlockType.ListElement}' AND subtype = 't'`;
 
   if (range === TaskRange.DOC && getCurrentDocInfo()?.rootID) {
     sqlQuery += ` AND root_id = '${getCurrentDocInfo().rootID}'`;
@@ -18,7 +22,7 @@ export async function fetchTasksFromDB(
     sqlQuery += ` AND box = '${getCurrentBoxInfo().box}'`;
   }
 
-  sqlQuery += " ORDER BY created ASC LIMIT 2000";
+  sqlQuery += " ORDER BY created ASC";
 
   const tasksResult = await sql(sqlQuery);
   if (!tasksResult || tasksResult.length === 0) {

@@ -2,7 +2,6 @@
   import { type App, openTab } from 'siyuan';
   import { type TaskItem } from '../types/tasks';
   import { TaskStatus, TaskPriority } from '../types/tasks';
-  import { TaskAnalysisService } from '../services/task-analysis.service';
 
   interface Props {
     app: App;
@@ -24,14 +23,6 @@
     }
   }
 
-  function getTaskText(): string {
-    let taskText = TaskAnalysisService.extractTaskText(task.fcontent || '');
-    if (!taskText) {
-      taskText = 'Untitled Task (click to view)';
-    }
-    return taskText;
-  }
-
   function getPriorityIconId(): string | null {
     switch (task.priority) {
       case TaskPriority.URGENT:
@@ -51,7 +42,7 @@
   class="task-item {task.status}" 
   onclick={handleTaskClick}
   onkeydown={(e) => e.key === 'Enter' && handleTaskClick()}
-  aria-label="Open task: {getTaskText()}"
+  aria-label="Open task: {task.fcontent}"
 >
   <div class="task-checkbox">
     <input 
@@ -67,7 +58,7 @@
           <use href="#{getPriorityIconId()}" />
         </svg>
       {/if}
-      {getTaskText()}
+      {task.text}
     </div>
     {#if showMeta}
       <div class="task-meta">

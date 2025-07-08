@@ -76,7 +76,8 @@ pnpm test
 
 ## Future Ideas
 
-- Mark tasks as complete/incomplete from the panel.
+- Group tasks by Document/Notebook
 - Add task due time
+- Allow to hide tasks from certain Notebook/Documents
 - Filtering by priority level
-- Automatic refresh.
+- Mark tasks as complete/incomplete from the panel.
