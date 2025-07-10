@@ -12,11 +12,9 @@ Inspired by task management in Obsidian. Displays a panel listing all tasks acro
 - **Task Priority System**: Visual priority indicators with Jira-style chevron icons.
 - **Task Sorting**: Sort tasks by created date, updated date, content, or priority.
 
-## Demo
+## Demo 
 
-<video src="asset/demo.mp4" controls width="600"></video>
-
-[Download or play demo video](asset/demo.mp4)
+https://github.com/user-attachments/assets/83bee894-830a-4a88-9bc9-2354becbc8c6
 
 ## Task Priority System
 
