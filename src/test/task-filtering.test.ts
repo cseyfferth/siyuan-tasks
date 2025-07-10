@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { taskStore } from "../stores/task.store";
-import { type TaskItem } from "../types/tasks";
 import { TaskStatus, TaskPriority } from "../types/tasks";
 import { configStore } from "../stores/config.store";
 import { get } from "svelte/store";
+import { mockTasks } from "./mocks";
 
 // Mock the API functions
 vi.mock("../api", () => ({
@@ -13,57 +13,6 @@ vi.mock("../api", () => ({
 }));
 
 describe("Task Filtering and Sorting", () => {
-  const mockTasks: TaskItem[] = [
-    {
-      id: "1",
-      markdown: "- [ ] ❗ High priority task",
-      content: "- [ ] ❗ High priority task",
-      fcontent: "- [ ] ❗ High priority task",
-      box: "box1",
-      boxName: "Notebook 1",
-      root_id: "doc1",
-      path: "/path1",
-      created: "2024-01-01T00:00:00Z",
-      updated: "2024-01-01T00:00:00Z",
-      type: "i",
-      subtype: "t",
-      status: TaskStatus.TODO,
-      priority: TaskPriority.HIGH,
-    },
-    {
-      id: "2",
-      markdown: "- [x] Completed task",
-      content: "- [x] Completed task",
-      fcontent: "- [x] Completed task",
-      box: "box1",
-      boxName: "Notebook 1",
-      root_id: "doc1",
-      path: "/path1",
-      created: "2024-01-02T00:00:00Z",
-      updated: "2024-01-02T00:00:00Z",
-      type: "i",
-      subtype: "t",
-      status: TaskStatus.DONE,
-      priority: TaskPriority.NORMAL,
-    },
-    {
-      id: "3",
-      markdown: "- [ ] ‼️ Urgent task",
-      content: "- [ ] ‼️ Urgent task",
-      fcontent: "- [ ] ‼️ Urgent task",
-      box: "box1",
-      boxName: "Notebook 1",
-      root_id: "doc1",
-      path: "/path1",
-      created: "2024-01-03T00:00:00Z",
-      updated: "2024-01-03T00:00:00Z",
-      type: "i",
-      subtype: "t",
-      status: TaskStatus.TODO,
-      priority: TaskPriority.URGENT,
-    },
-  ];
-
   beforeEach(() => {
     // Reset stores
     taskStore.setTasks([]);
@@ -124,6 +73,7 @@ describe("Task Filtering and Sorting", () => {
     // Test case: task with no priority but sub-blocks with priority
     const taskWithSubBlocks = {
       id: "4",
+      text: "Regular task",
       markdown:
         "- [ ] Regular task\n  - [ ] ❗ Sub-task with high priority\n  - [ ] Another sub-task",
       content:

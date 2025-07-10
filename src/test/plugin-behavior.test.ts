@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { configStore } from "../stores/config.store";
 import { taskStore } from "../stores/task.store";
-import { type TaskItem } from "../types/tasks";
 import { TaskStatus, TaskPriority } from "../types/tasks";
 import { get } from "svelte/store";
+import { mockTasks } from "./mocks";
 
 // Mock the API functions
 vi.mock("../api", () => ({
@@ -24,57 +24,6 @@ vi.mock("../libs/setting-utils", () => ({
 }));
 
 describe("Plugin Behavior on Page Reload", () => {
-  const mockTasks: TaskItem[] = [
-    {
-      id: "1",
-      markdown: "- [ ] ❗ High priority task",
-      content: "- [ ] ❗ High priority task",
-      fcontent: "❗ High priority task",
-      box: "box1",
-      boxName: "Notebook 1",
-      root_id: "doc1",
-      path: "/path1",
-      created: "2024-01-01T00:00:00Z",
-      updated: "2024-01-01T00:00:00Z",
-      type: "i",
-      subtype: "t",
-      status: TaskStatus.TODO,
-      priority: TaskPriority.HIGH,
-    },
-    {
-      id: "2",
-      markdown: "- [x] Completed task",
-      content: "- [x] Completed task",
-      fcontent: "Completed task",
-      box: "box1",
-      boxName: "Notebook 1",
-      root_id: "doc1",
-      path: "/path1",
-      created: "2024-01-02T00:00:00Z",
-      updated: "2024-01-02T00:00:00Z",
-      type: "i",
-      subtype: "t",
-      status: TaskStatus.DONE,
-      priority: TaskPriority.NORMAL,
-    },
-    {
-      id: "3",
-      markdown: "- [ ] ‼️ Urgent task",
-      content: "- [ ] ‼️ Urgent task",
-      fcontent: "‼️ Urgent task",
-      box: "box1",
-      boxName: "Notebook 1",
-      root_id: "doc1",
-      path: "/path1",
-      created: "2024-01-03T00:00:00Z",
-      updated: "2024-01-03T00:00:00Z",
-      type: "i",
-      subtype: "t",
-      status: TaskStatus.TODO,
-      priority: TaskPriority.URGENT,
-    },
-  ];
-
   beforeEach(() => {
     vi.clearAllMocks();
 

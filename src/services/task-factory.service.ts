@@ -27,6 +27,9 @@ export class TaskFactory {
   ): TaskItem {
     return {
       id: rawBlock.id,
+      text: TaskAnalysisService.extractTaskText(rawBlock.fcontent),
+      status: this.detectTaskStatus(rawBlock.markdown),
+      priority: TaskAnalysisService.detectPriority(rawBlock.fcontent),
       markdown: rawBlock.markdown,
       content: rawBlock.content,
       fcontent: rawBlock.fcontent,
@@ -38,8 +41,6 @@ export class TaskFactory {
       updated: rawBlock.updated,
       type: rawBlock.type,
       subtype: rawBlock.subtype,
-      status: this.detectTaskStatus(rawBlock.markdown),
-      priority: TaskAnalysisService.detectPriority(rawBlock.fcontent),
       docPath,
     };
   }

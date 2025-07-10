@@ -51,7 +51,7 @@ export class TaskProcessingService {
             [TaskPriority.URGENT]: 0,
             [TaskPriority.HIGH]: 1,
             [TaskPriority.NORMAL]: 2,
-            [TaskPriority.LOW]: 3,
+            [TaskPriority.WAIT]: 3,
           };
           return priorityOrder[a.priority] - priorityOrder[b.priority];
         });

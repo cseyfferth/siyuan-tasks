@@ -2,7 +2,7 @@
   "name": "siyuan-tasks",
   "author": "Macavity",
   "url": "https://github.com/Macavity/siyuan-tasks",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "minAppVersion": "3.0.0",
   "backends": [
     "windows",
@@ -35,5 +35,18 @@
   "funding": {
     "custom": [""]
   },
-  "keywords": ["tasks", "todo", "list", "obsidian", "task management"]
+  "keywords": [
+    "tasks",
+    "todo",
+    "priority",
+    "list",
+    "obsidian",
+    "task management",
+    "任务",
+    "待办事项",
+    "优先级",
+    "列表",
+    "黑曜石",
+    "任务管理"
+  ]
 }

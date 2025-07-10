@@ -12,9 +12,9 @@ export enum TaskStatus {
 
 export enum TaskPriority {
   NORMAL = "normal",
-  LOW = "low",
   HIGH = "high",
   URGENT = "urgent",
+  WAIT = "wait",
 }
 
 export enum TaskDisplayMode {
@@ -25,6 +25,10 @@ export enum TaskDisplayMode {
 
 export interface TaskItem {
   id: string;
+  text: string;
+  status: TaskStatus.TODO | TaskStatus.DONE;
+  priority: TaskPriority;
+
   /** the raw markdown content */
   markdown: string;
   /** content without markdown */
@@ -39,8 +43,6 @@ export interface TaskItem {
   updated: string;
   type: string;
   subtype: string;
-  status: TaskStatus.TODO | TaskStatus.DONE;
-  priority: TaskPriority;
   docPath?: string;
 }
 

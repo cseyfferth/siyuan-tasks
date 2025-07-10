@@ -15,10 +15,6 @@ import { TaskStatus, TaskPriority } from "../types/tasks";
  * - "low" = Low priority (green chevron down)
  * - No indicator = Normal priority (no icon)
  *
- * Example usage:
- * ```typescript
- * const analysis = TaskAnalysisService.analyzeTask("- [ ] ❗ Important task");
- * // Returns: { status: TaskStatus.TODO, priority: TaskPriority.HIGH, text: "Important task", hasPriority: true }
  * ```
  */
 export class TaskAnalysisService {
@@ -40,9 +36,8 @@ export class TaskAnalysisService {
    * Detect task status from markdown
    */
   static detectStatus(markdown: string): TaskStatus {
-    if (this.isTodo(markdown)) return TaskStatus.TODO;
     if (this.isDone(markdown)) return TaskStatus.DONE;
-    return TaskStatus.ALL;
+    return TaskStatus.TODO;
   }
 
   /**
@@ -61,9 +56,9 @@ export class TaskAnalysisService {
       return TaskPriority.HIGH;
     }
 
-    // Low priority: "low"
-    if (lowercaseContent.includes("low")) {
-      return TaskPriority.LOW;
+    // Wait priority: ⏳ (hourglass)
+    if (lowercaseContent.includes("⏳")) {
+      return TaskPriority.WAIT;
     }
 
     return TaskPriority.NORMAL;
@@ -73,37 +68,12 @@ export class TaskAnalysisService {
    * Extract clean task text by removing priority indicators
    */
   static extractTaskText(taskText: string = ""): string {
-    taskText = taskText.replace(/[\u2757\u203c]|\ufe0f/g, "").trim();
+    // Remove priority indicators (❗, ‼️, ⏳)
+    taskText = taskText.replace(/[\u2757\u203c\u23f3]|\ufe0f/g, "").trim();
+
+    // Convert SiYuan's internal hash tag format from #MyHash# to #MyHash
+    taskText = taskText.replace(/#([^#]+)#/g, "#$1");
 
     return taskText;
-  }
-
-  /**
-   * Check if a task has any priority indicator
-   */
-  static hasPriority(markdown: string): boolean {
-    return this.detectPriority(markdown) !== TaskPriority.NORMAL;
-  }
-
-  /**
-   * Get all task analysis data from markdown
-   */
-  static analyzeTask(markdown: string): {
-    status: TaskStatus;
-    priority: TaskPriority;
-    text: string;
-    hasPriority: boolean;
-  } {
-    const status = this.detectStatus(markdown);
-    const priority = this.detectPriority(markdown);
-    const text = this.extractTaskText(markdown);
-    const hasPriority = this.hasPriority(markdown);
-
-    return {
-      status,
-      priority,
-      text,
-      hasPriority,
-    };
   }
 }
