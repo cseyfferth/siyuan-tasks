@@ -12,6 +12,12 @@ Inspired by task management in Obsidian. Displays a panel listing all tasks acro
 - **Task Priority System**: Visual priority indicators with Jira-style chevron icons.
 - **Task Sorting**: Sort tasks by created date, updated date, content, or priority.
 
+## Demo
+
+<video src="asset/demo.mp4" controls width="600"></video>
+
+[Download or play demo video](asset/demo.mp4)
+
 ## Task Priority System
 
 The plugin supports a priority system that uses SiYuan's emoji suggestions for easy input and displays them as clean chevron icons:
