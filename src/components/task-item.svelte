@@ -29,8 +29,8 @@
         return 'priorityUrgent';
       case TaskPriority.HIGH:
         return 'priorityHigh';
-      case TaskPriority.LOW:
-        return 'priorityLow';
+      case TaskPriority.WAIT:
+        return 'priorityWait';
       case TaskPriority.NORMAL:
       default:
         return null;

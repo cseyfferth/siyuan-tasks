@@ -21,14 +21,14 @@ The plugin supports a priority system that uses SiYuan's emoji suggestions for e
 - **Urgent** <svg width="16" height="16" fill="#dc2626" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708z"/><path fill-rule="evenodd" d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg> (Double chevron up): Use `:!!` to insert ‼️
 - **High** <svg width="16" height="16" fill="#dc2626" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg> (Single chevron up): Use `:!` to insert ❗
 - **Normal** (No icon): Default priority level
-- **Low** <svg width="16" height="16" fill="#16a34a" viewBox="0 0 16 16"><path d="M8 6L10 10H6L8 6Z"/><path d="M8 10L10 14H6L8 10Z"/></svg> (Double chevron down): Type "low" in the task text
+- **Wait** <svg width="16" height="16" fill="#ca8a04" viewBox="0 0 16 16"><path d="M8 2a6 6 0 1 1 0 12A6 6 0 0 1 8 2zm0 1a5 5 0 1 0 0 10A5 5 0 0 0 8 3z" fill="#ca8a04"/><path d="M8 4v4l2.5 2.5" stroke="#ca8a04" stroke-width="1.5" fill="none"/></svg> (Hourglass): Use `/wait` to insert ⏳
 
 ### Example Usage
 
 ```markdown
 - [ ] ❗ High priority task
 - [ ] ‼️ Urgent task that needs immediate attention
-- [ ] low Low priority task
+- [ ] ⏳ Wait task (will be done later)
 - [ ] Regular task (normal priority)
 ```
 
@@ -41,9 +41,23 @@ Tasks can be sorted by different criteria through the plugin settings:
 - **Created date**: Sort by when the task was created (oldest first)
 - **Updated date**: Sort by when the task was last modified (newest first)
 - **Content**: Sort alphabetically by task text
-- **Priority**: Sort by priority level (Urgent → High → Normal → Low)
+- **Priority**: Sort by priority level (Urgent → High → Normal → Wait)
 
 The sorting preference is saved and applied automatically to all task views.
+
+## Changelog
+
+### v1.1.0
+
+- **Added `/wait` command**: Insert ⏳ emoji at cursor position to mark tasks as waiting (lower priority than normal tasks)
+- **Fixed tag display**: Hash tags now display as `#MyHash` instead of `#MyHash#` (SiYuan's internal format)
+- **Updated priority system**: Replaced "Low" priority with "Wait" priority for better task management
+
+### v1.0.0
+
+- Initial release with task list panel functionality
+- Priority system with visual indicators
+- Task sorting and filtering capabilities
 
 ## Development
 

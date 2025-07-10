@@ -56,6 +56,10 @@ describe("TaskAnalysisService", () => {
           input: "‼️ Urgent task with #Tag1# and #Tag2#",
           expected: "Urgent task with #Tag1 and #Tag2",
         },
+        {
+          input: "⏳ Wait task with #Important#",
+          expected: "Wait task with #Important",
+        },
       ];
 
       testCases.forEach(({ input, expected }) => {
@@ -137,12 +141,12 @@ describe("TaskAnalysisService", () => {
       );
     });
 
-    it("should detect low priority", () => {
-      expect(TaskAnalysisService.detectPriority("Task with low priority")).toBe(
-        TaskPriority.LOW
+    it("should detect wait priority", () => {
+      expect(TaskAnalysisService.detectPriority("Task with ⏳")).toBe(
+        TaskPriority.WAIT
       );
-      expect(TaskAnalysisService.detectPriority("low priority task")).toBe(
-        TaskPriority.LOW
+      expect(TaskAnalysisService.detectPriority("⏳ Wait task")).toBe(
+        TaskPriority.WAIT
       );
     });
 

@@ -16,6 +16,8 @@
     "expand": "Expand",
     "collapse": "Collapse"
   },
+  "wait": "Signal this task will be done later",
+  "getTab": "Get Tab",
   "range": {
     "doc": "Document",
     "box": "Notebook",
@@ -26,12 +28,12 @@
     "urgent": "Urgent",
     "high": "High",
     "normal": "Normal",
-    "low": "Low",
+    "wait": "Wait",
     "none": "No Priority",
     "indicators": {
       "urgent": "‼️ (type :!!)",
       "high": "❗ (type :!)",
-      "low": "low"
+      "wait": "⏳ (type /wait)"
     }
   },
   "setting": {

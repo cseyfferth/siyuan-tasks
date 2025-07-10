@@ -56,9 +56,9 @@ export class TaskAnalysisService {
       return TaskPriority.HIGH;
     }
 
-    // Low priority: "low"
-    if (lowercaseContent.includes("low")) {
-      return TaskPriority.LOW;
+    // Wait priority: ⏳ (hourglass)
+    if (lowercaseContent.includes("⏳")) {
+      return TaskPriority.WAIT;
     }
 
     return TaskPriority.NORMAL;
@@ -68,18 +68,12 @@ export class TaskAnalysisService {
    * Extract clean task text by removing priority indicators
    */
   static extractTaskText(taskText: string = ""): string {
-    taskText = taskText.replace(/[\u2757\u203c]|\ufe0f/g, "").trim();
+    // Remove priority indicators (❗, ‼️, ⏳)
+    taskText = taskText.replace(/[\u2757\u203c\u23f3]|\ufe0f/g, "").trim();
 
     // Convert SiYuan's internal hash tag format from #MyHash# to #MyHash
     taskText = taskText.replace(/#([^#]+)#/g, "#$1");
 
     return taskText;
-  }
-
-  /**
-   * Check if a task has any priority indicator
-   */
-  static hasPriority(markdown: string): boolean {
-    return this.detectPriority(markdown) !== TaskPriority.NORMAL;
   }
 }

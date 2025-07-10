@@ -16,6 +16,8 @@
     "expand": "展开",
     "collapse": "收起"
   },
+  "wait": "插入等待表情",
+  "waitDesc": "在当前光标位置插入 ⏳ 以标记任务为等待状态",
   "range": {
     "doc": "文档",
     "box": "笔记本",
@@ -26,12 +28,12 @@
     "urgent": "紧急",
     "high": "高",
     "normal": "普通",
-    "low": "低",
+    "wait": "等待",
     "none": "无优先级",
     "indicators": {
       "urgent": "‼️ (输入 :!!)",
       "high": "❗ (输入 :!)",
-      "low": "low"
+      "wait": "⏳ (输入 /wait)"
     }
   },
   "setting": {

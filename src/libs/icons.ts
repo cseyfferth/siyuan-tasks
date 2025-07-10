@@ -20,4 +20,9 @@ export const icons = `
 <symbol id="priorityLow" viewBox="0 0 16 16">
   <path d="M8 6L10 10H6L8 6Z" fill="#16a34a"/>
   <path d="M8 10L10 14H6L8 10Z" fill="#16a34a"/>
+</symbol>
+
+<symbol id="priorityWait" viewBox="0 0 16 16">
+  <path d="M8 2a6 6 0 1 1 0 12A6 6 0 0 1 8 2zm0 1a5 5 0 1 0 0 10A5 5 0 0 0 8 3z" fill="#ca8a04"/>
+  <path d="M8 4v4l2.5 2.5" stroke="#ca8a04" stroke-width="1.5" fill="none"/>
 </symbol>`;

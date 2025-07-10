@@ -12,9 +12,9 @@ export enum TaskStatus {
 
 export enum TaskPriority {
   NORMAL = "normal",
-  LOW = "low",
   HIGH = "high",
   URGENT = "urgent",
+  WAIT = "wait",
 }
 
 export enum TaskDisplayMode {

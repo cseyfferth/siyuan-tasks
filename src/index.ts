@@ -1,4 +1,11 @@
-import { Plugin, Model, Dock, IEventBusMap, IPluginDockTab } from "siyuan";
+import {
+  Protyle,
+  Plugin,
+  Model,
+  Dock,
+  IEventBusMap,
+  IPluginDockTab,
+} from "siyuan";
 import "@/index.scss";
 
 import TaskList from "@/components/task-list.svelte";
@@ -40,6 +47,7 @@ export default class TaskListPlugin extends Plugin {
       langKey: "showTaskList",
       hotkey: "⇧⌘T",
       globalCallback: () => {
+        console.log("showTaskList");
         // Toggle the task list dock
         if (this.taskDock && this.taskDock.model.element) {
           // This will toggle the dock visibility
@@ -48,6 +56,17 @@ export default class TaskListPlugin extends Plugin {
         }
       },
     });
+
+    this.protyleSlash = [
+      {
+        filter: ["wait", "⏳", "后来"],
+        html: `<div class="b3-list-item__first"><span class="b3-list-item__text">${this.i18n.wait}</span><span class="b3-list-item__meta">⏳</span></div>`,
+        id: "insertWait",
+        callback(protyle: Protyle) {
+          protyle.insert("⏳");
+        },
+      },
+    ];
 
     this.initialiseSettings();
 
