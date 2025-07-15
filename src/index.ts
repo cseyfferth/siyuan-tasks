@@ -168,7 +168,9 @@ export default class TaskListPlugin extends Plugin {
     });
     mount(Settings, {
       target: dialog.element.querySelector("#SettingPanel"),
-      props: {},
+      props: {
+        i18n: this.i18n as unknown as I18N,
+      },
     });
   }
 
