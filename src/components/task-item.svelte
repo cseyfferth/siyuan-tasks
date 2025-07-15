@@ -38,8 +38,10 @@
   }
 </script>
 
-<button 
+<span 
   class="task-item {task.status}" 
+  role="button"
+  tabindex="0"
   onclick={handleTaskClick}
   onkeydown={(e) => e.key === 'Enter' && handleTaskClick()}
   aria-label="Open task: {task.fcontent}"
@@ -66,7 +68,7 @@
       </div>
     {/if}
   </div>
-</button>
+</span>
 
 <style>
   .task-item {
