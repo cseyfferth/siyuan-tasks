@@ -1,6 +1,7 @@
 # Siyuan Task List Plugin
 
 [中文版](./README_zh_CN.md)
+[Changelog](./CHANGELOG.md)
 
 Inspired by task management in Obsidian. Displays a panel listing all tasks across all notebooks.
 
@@ -11,6 +12,12 @@ Inspired by task management in Obsidian. Displays a panel listing all tasks acro
 - Automatic and manual refresh
 - **Task Priority System**: Visual priority indicators with Jira-style chevron icons.
 - **Task Sorting**: Sort tasks by created date, updated date, content, or priority.
+
+## Changes in last release
+
+### v1.2.0
+
+- **Dark Mode Support**: Task list entries now properly support dark mode themes for better visibility and consistency across different SiYuan themes.
 
 ## Demo
 
@@ -50,20 +57,6 @@ Tasks can be sorted by different criteria through the plugin settings:
 - **Priority**: Sort by priority level (Urgent → High → Normal → Wait)
 
 The sorting preference is saved and applied automatically to all task views.
-
-## Changelog
-
-### v1.1.0
-
-- **Added `/wait` command**: Insert ⏳ emoji at cursor position to mark tasks as waiting (lower priority than normal tasks)
-- **Fixed tag display**: Hash tags now display as `#MyHash` instead of `#MyHash#` (SiYuan's internal format)
-- **Updated priority system**: Replaced "Low" priority with "Wait" priority for better task management
-
-### v1.0.0
-
-- Initial release with task list panel functionality
-- Priority system with visual indicators
-- Task sorting and filtering capabilities
 
 ## Development
 
