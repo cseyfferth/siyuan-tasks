@@ -15,7 +15,7 @@ Inspired by task management in Obsidian. Displays a panel listing all tasks acro
 
 ## Changes in last release
 
-### v1.2.0
+### [1.2.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.2.0)
 
 - **Dark Mode Support**: Task list entries now properly support dark mode themes for better visibility and consistency across different SiYuan themes.
 

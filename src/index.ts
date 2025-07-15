@@ -3,6 +3,9 @@ import {
   Plugin,
   Model,
   Dock,
+  Dialog,
+  getFrontend,
+  Menu,
   IEventBusMap,
   IPluginDockTab,
 } from "siyuan";
@@ -16,7 +19,7 @@ import { i18nStore } from "./stores/i18n.store";
 import { taskStore } from "./stores/task.store";
 import { type I18N } from "./types/i18n";
 import { TaskDisplayMode } from "./types/tasks";
-import { mount } from "svelte";
+import { mount, unmount } from "svelte";
 import { SiyuanEvents } from "./types/siyuan-events";
 import {
   configStore,
@@ -25,6 +28,7 @@ import {
   type PluginConfig,
 } from "./stores/config.store";
 import { Logger } from "./services/logger.service";
+import Settings from "./components/settings.svelte";
 
 const STORAGE_NAME = "plugin-tasks";
 const TASK_DOCK_TYPE = "task-list-panel-dock";
@@ -36,12 +40,15 @@ type TEventSwitchProtyle = CustomEvent<
 export default class TaskListPlugin extends Plugin {
   customTab: () => Model;
   private settingUtils: SettingUtils;
+  private isMobile: boolean;
   private taskDock: { config: IPluginDockTab; model: Dock };
   private refreshTimer: NodeJS.Timeout | null = null;
 
   async onload() {
     this.addIcons(icons);
     i18nStore.set(this.i18n as unknown as I18N);
+    const frontEnd = getFrontend();
+    this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
 
     this.addCommand({
       langKey: "showTaskList",
@@ -146,6 +153,23 @@ export default class TaskListPlugin extends Plugin {
     } else {
       this.stopRefreshTimer();
     }
+  }
+
+  public openSetting(): void {
+    console.log("openSetting");
+    let dialog = new Dialog({
+      title: "SettingPanel",
+      content: `<div id="SettingPanel" style="height: 100%;"></div>`,
+      width: "800px",
+      destroyCallback: (options) => {
+        console.log("destroyCallback", options);
+        unmount(Settings);
+      },
+    });
+    mount(Settings, {
+      target: dialog.element.querySelector("#SettingPanel"),
+      props: {},
+    });
   }
 
   private startRefreshTimer(intervalSeconds: number) {
