@@ -19,11 +19,9 @@ Inspired by task management in Obsidian. Displays a panel listing all tasks acro
 
 - **Dark Mode Support**: Task list entries now properly support dark mode themes for better visibility and consistency across different SiYuan themes.
 
-## Demo
+## Demo 
 
-<video src="asset/demo.mp4" controls width="600"></video>
-
-[Download or play demo video](asset/demo.mp4)
+https://github.com/user-attachments/assets/83bee894-830a-4a88-9bc9-2354becbc8c6
 
 ## Task Priority System
 
