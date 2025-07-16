@@ -82,6 +82,7 @@ export default [
   {
     ignores: [
       "src/**/*.test.ts",
+      "src/libs/setting-utils.ts",
       "src/libs/siyuan/**/*",
       "test/**",
       "vue/**",

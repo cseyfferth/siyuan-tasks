@@ -17,6 +17,11 @@ export async function request(url: string, data: any) {
   return res;
 }
 
+export interface ApiError {
+  code: number;
+  msg: string;
+}
+
 // **************************************** Noteboook ****************************************
 
 export async function lsNotebooks(): Promise<IReslsNotebooks> {
@@ -359,12 +364,12 @@ export async function renderSprig(template: string): Promise<string> {
 
 // **************************************** File ****************************************
 
-export async function getFile(path: string): Promise<any> {
+export async function getFile<T>(path: string): Promise<T | ApiError> {
   const data = {
     path: path,
   };
   const url = "/api/file/getFile";
-  return new Promise((resolve, _) => {
+  return new Promise<T>((resolve, _) => {
     fetchPost(url, data, (content: any) => {
       resolve(content);
     });

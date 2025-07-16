@@ -9,6 +9,7 @@
  */
 
 import { Logger } from "@/services/logger.service";
+import { PluginConfig } from "@/stores/config.store";
 import { Plugin, Setting } from "siyuan";
 
 /**
@@ -107,7 +108,7 @@ export class SettingUtils {
         if (args.callback !== undefined) {
           args.callback(data);
         }
-        this.plugin.data[this.name] = data;
+        (this.plugin.data as PluginConfig)[this.name] = data as PluginConfig;
         this.save(data);
       },
       destroyCallback: () => {
@@ -120,14 +121,14 @@ export class SettingUtils {
   }
 
   async load() {
-    const data = await this.plugin.loadData(this.file);
+    const data = (await this.plugin.loadData(this.file)) as PluginConfig;
     Logger.debug("Load config:", data);
     if (data) {
       for (const [key, item] of this.settings) {
         item.value = data?.[key] ?? item.value;
       }
     }
-    this.plugin.data[this.name] = this.dump();
+    (this.plugin.data as PluginConfig)[this.name] = this.dump();
     return data;
   }
 
@@ -232,13 +233,13 @@ export class SettingUtils {
    * 将设置项目导出为 JSON 对象
    * @returns object
    */
-  dump(): object {
-    const data: Record<string, unknown> = {};
+  dump(): PluginConfig {
+    const data: Partial<PluginConfig> = {};
     for (const [key, item] of this.settings) {
       if (item.type === "button") continue;
       data[key] = item.value;
     }
-    return data;
+    return data as PluginConfig;
   }
 
   addItem(item: ISettingUtilsItem) {

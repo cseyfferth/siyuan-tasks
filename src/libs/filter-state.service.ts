@@ -32,7 +32,7 @@ export class FilterStateService {
     try {
       const savedState = localStorage.getItem(STORAGE_KEY);
       if (savedState) {
-        const parsed = JSON.parse(savedState);
+        const parsed = JSON.parse(savedState) as FilterState;
 
         // Validate and use saved values, fallback to defaults if invalid
         const state: FilterState = {

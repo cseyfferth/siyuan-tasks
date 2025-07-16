@@ -33,7 +33,7 @@
       "svelte",
       "vitest/globals",
       "@testing-library/jest-dom",
-      "./src/types/siyuan.types.ts"
+      "./src/types/index.d.ts"
     ],
     // "baseUrl": "./src",
     "paths": {

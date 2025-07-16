@@ -1,5 +1,6 @@
 import { TaskDisplayMode } from "@/types/tasks";
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
+import { SettingsDTO } from "@/types/dto/settings.dto";
 
 export enum PluginSetting {
   AutoRefresh = "autoRefresh",
@@ -40,21 +41,75 @@ function createConfigStore() {
     update,
     setLoading: (loading: boolean) =>
       update((config) => ({ ...config, loading })),
-    setAutoRefresh: (value: boolean) =>
-      update((config) => ({ ...config, autoRefresh: value })),
-    setRefreshInterval: (value: number) =>
+
+    // Dynamic setter that works with any PluginSetting key
+    setSetting: (key: PluginSetting, value: unknown) =>
+      update((config) => {
+        switch (key) {
+          case PluginSetting.AutoRefresh:
+            if (typeof value !== "boolean") {
+              return config;
+            }
+            return { ...config, autoRefresh: value };
+          case PluginSetting.RefreshInterval:
+            if (typeof value !== "number") {
+              return config;
+            }
+            return {
+              ...config,
+              refreshInterval: Math.max(value, MIN_REFRESH_INTERVAL),
+            };
+          case PluginSetting.ShowCompleted:
+            if (typeof value !== "boolean") {
+              return config;
+            }
+            return { ...config, showCompleted: value };
+          case PluginSetting.MaxTasks:
+            if (typeof value !== "number") {
+              return config;
+            }
+            return { ...config, maxTasks: value };
+          case PluginSetting.SortBy:
+            if (typeof value !== "string") {
+              return config;
+            }
+            return { ...config, sortBy: value };
+          case PluginSetting.DisplayMode:
+            if (
+              !Object.values(TaskDisplayMode).includes(value as TaskDisplayMode)
+            ) {
+              return config;
+            }
+            return { ...config, displayMode: value as TaskDisplayMode };
+          default:
+            return config;
+        }
+      }),
+
+    // Get current settings as an object for saving
+    getSettingsObject: () => {
+      const config = get({ subscribe });
+      return {
+        [PluginSetting.AutoRefresh]: config.autoRefresh,
+        [PluginSetting.RefreshInterval]: config.refreshInterval,
+        [PluginSetting.ShowCompleted]: config.showCompleted,
+        [PluginSetting.MaxTasks]: config.maxTasks,
+        [PluginSetting.SortBy]: config.sortBy,
+        [PluginSetting.DisplayMode]: config.displayMode,
+      };
+    },
+
+    setFromSettingsDTO: (settings: SettingsDTO) => {
       update((config) => ({
         ...config,
-        refreshInterval: Math.max(value, MIN_REFRESH_INTERVAL),
-      })),
-    setShowCompleted: (value: boolean) =>
-      update((config) => ({ ...config, showCompleted: value })),
-    setMaxTasks: (value: number) =>
-      update((config) => ({ ...config, maxTasks: value })),
-    setSortBy: (value: string) =>
-      update((config) => ({ ...config, sortBy: value })),
-    setDisplayMode: (value: TaskDisplayMode) =>
-      update((config) => ({ ...config, displayMode: value })),
+        autoRefresh: settings.autoRefresh,
+        refreshInterval: settings.refreshInterval,
+        showCompleted: settings.showCompleted,
+        maxTasks: settings.maxTasks,
+        sortBy: settings.sortBy,
+        displayMode: settings.displayMode,
+      }));
+    },
   };
 }
 

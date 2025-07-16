@@ -1,56 +1,56 @@
 <script lang="ts">
     import { showMessage } from "siyuan";
     import SettingPanel from "./ui/setting-panel.svelte";
-    import { PluginSetting } from "@/stores/config.store";
+    import { PluginSetting, MIN_REFRESH_INTERVAL } from "@/stores/config.store";
     import { type I18N } from "@/types/i18n";
+    import { configStore } from "@/stores/config.store";
+    import { Plugin } from "siyuan";
+    import { TaskDisplayMode } from "@/types/tasks";
+    import { STORAGE_NAME } from "@/libs/const";
     
-    let groups: string[] = ["General", "✨ Group 2"];
+    let groups: string[] = ["General", "Layout"];
     let focusGroup = $state(groups[0]);
   
     interface Props {
-    i18n: I18N;
+        i18n: I18N;
+        plugin: Plugin;
     }
 
-    let { i18n }: Props = $props();
+    let { i18n, plugin }: Props = $props();
 
-    const group1Items: ISettingItem[] = [
+    const group1Items = $derived([
         {
             key: PluginSetting.AutoRefresh,
-            value: true,
-            type: "checkbox",
+            value: $configStore.autoRefresh,
+            type: "checkbox" as const,
             title: i18n.setting.autoRefresh,
             description: i18n.setting.autoRefreshDesc,
         },
         {
             key: PluginSetting.RefreshInterval,
-            value: 30,
-            type: "number",
+            value: $configStore.refreshInterval,
+            type: "number" as const,
             title: i18n.setting.refreshInterval,
             description: i18n.setting.refreshIntervalDesc,
-            // callback: () => {
-            //     // Enforce minimum refresh interval when user changes the setting
-            //     const currentValue = this.settingUtils.get(
-            //         PluginSetting.RefreshInterval
-            //     ) as number;
-            //     if (currentValue < MIN_REFRESH_INTERVAL) {
-            //         this.settingUtils.set(
-            //         PluginSetting.RefreshInterval,
-            //         MIN_REFRESH_INTERVAL
-            //         );
-            //     }
-            // },
+        },
+        {
+            key: PluginSetting.MaxTasks,
+            value: $configStore.maxTasks,
+            type: "number" as const,
+            title: i18n.setting.maxTasks,
+            description: i18n.setting.maxTasksDesc,
         },
         {
             key: PluginSetting.ShowCompleted,
-            value: true,
-            type: "checkbox",
+            value: $configStore.showCompleted,
+            type: "checkbox" as const,
             title: i18n.setting.showCompleted,
             description: i18n.setting.showCompletedDesc,
         },
         {
             key: PluginSetting.SortBy,
-            value: "created",
-            type: "select",
+            value: $configStore.sortBy,
+            type: "select" as const,
             title: i18n.setting.sortBy,
             description: i18n.setting.sortByDesc,
             options: {
@@ -60,36 +60,48 @@
                 priority: i18n.setting.sortOptions.priority,
             },
         }
-    ];
+    ]);
 
-    const group2Items: ISettingItem[] = [
+    const group2Items = $derived([
         {
-            type: 'button',
-            title: 'button',
-            description: 'This is a button',
-            key: 'e',
-            value: 'Click Button',
-            button: {
-                label: 'Click Me',
-                callback: () => {
-                    showMessage('Hello, world!');
+            key: PluginSetting.DisplayMode,
+            value: $configStore.displayMode,
+            type: "select" as const,
+            title: i18n.setting.displayMode,
+            description: i18n.setting.displayModeDesc,  
+            options: {
+                [TaskDisplayMode.ONLY_TASKS]: i18n.setting.displayOptions.onlyTasks,
+                [TaskDisplayMode.NOTEBOOK_DOCUMENT_TASKS]: i18n.setting.displayOptions.notebookDocumentTasks,
+                [TaskDisplayMode.NOTEBOOK_TASKS]: i18n.setting.displayOptions.notebookTasks,
+            },
+        }
+    ]);
+
+    /********** Callbacks **********/
+    const onSettingChange = async (group: string, key: string, value: unknown) => {
+        console.log("onSettingChange", { group, key, value });
+        
+        if (group === groups[0] || group === groups[1]) {
+            try {
+                // Handle special validation for refresh interval
+                let finalValue = value;
+                if (key === PluginSetting.RefreshInterval) {
+                    finalValue = Math.max(value as number, MIN_REFRESH_INTERVAL);
+                    if (finalValue !== value) {
+                        showMessage(`Refresh interval set to minimum: ${finalValue} seconds`);
+                    }
                 }
+                
+                // Update config store using dynamic setter
+                configStore.setSetting(key as PluginSetting, finalValue);
+                
+                // Save settings to storage using plugin's saveData method
+                await plugin.saveData(STORAGE_NAME, configStore.getSettingsObject());
+                console.log("Settings saved successfully");
+            } catch (error) {
+                console.error("Failed to save settings:", error);
+                showMessage("Failed to save settings");
             }
-        },
-    ];
-
-    /********** Events **********/
-    interface ChangeEvent {
-        group: string;
-        key: string;
-        value: any;
-    }
-
-    const onChanged = ({ detail }: CustomEvent<ChangeEvent>) => {
-        if (detail.group === groups[0]) {
-            // setting.set(detail.key, detail.value);
-            //Please add your code here
-            //Udpate the plugins setting data, don't forget to call plugin.save() for data persistence
         }
     };
 </script>
@@ -120,16 +132,14 @@
             group={groups[0]}
             settingItems={group1Items}
             display={focusGroup === groups[0]}
-            on:changed={onChanged}
-            on:click={({ detail }) => { console.debug("Click:", detail.key); }}
+            onSettingChange={onSettingChange}
         >
         </SettingPanel>
         <SettingPanel
             group={groups[1]}
             settingItems={group2Items}
             display={focusGroup === groups[1]}
-            on:changed={onChanged}
-            on:click={({ detail }) => { console.debug("Click:", detail.key); }}
+            onSettingChange={onSettingChange}
         >
         </SettingPanel>
     </div>

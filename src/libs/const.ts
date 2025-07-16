@@ -97,3 +97,6 @@ export const NodeIcons = {
         icon: "iconBoth"
     }
 };
+
+export const STORAGE_NAME = "plugin-tasks";
+export const TASK_DOCK_TYPE = "task-list-panel-dock";
