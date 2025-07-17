@@ -3,8 +3,7 @@
   import { type App } from 'siyuan';
   import { type I18N } from '../types/i18n';
   import { taskStore } from '../stores/task.store';
-  import { type TaskItem } from '../types/tasks';
-  import { TaskRange, TaskStatus, TaskDisplayMode } from '../types/tasks';
+  import { TaskRange, TaskStatus } from '../types/tasks';
   import { filterStateService, type FilterState } from '../libs/filter-state.service';
   import TaskHeader from './task-header.svelte';
   import RangeTabs from './range-tabs.svelte';
@@ -23,28 +22,18 @@
   let currentRange = $state<TaskRange>(TaskRange.DOC);
   let searchText = $state('');
   let isExpanded = $state(true);
-  let displayMode = $state<TaskDisplayMode>(TaskDisplayMode.ONLY_TASKS);
   
   // Subscribe to store
-  let tasks = $state<TaskItem[]>([]);
-  let loading = $state(false);
-  let error = $state('');
   let currentDocInfo = $state({ id: '', rootID: '', name: '' });
   let configLoading = $state(true);
 
   taskStore.subscribe(state => {
-    tasks = state.tasks;
-    loading = state.loading;
-    error = state.error;
     currentDocInfo = state.currentDocInfo;
   });
 
   configStore.subscribe(config => {
     configLoading = config.loading;
   });
-
-  const configShowCompleted = $derived($configStore.showCompleted);
-  const configSortBy = $derived($configStore.sortBy);
 
   // Combined loading state
   let isInitializing = $derived(configLoading);
@@ -54,37 +43,10 @@
     const state: FilterState = {
       range: currentRange,
       status: TaskStatus.ALL,
-      displayMode: displayMode,
       timestamp: Date.now()
     };
     filterStateService.saveFilterState(state);
   }
-
-  // Computed
-  let filteredTasks = $derived(tasks.filter(task => {
-    // Filter by search text
-    if (searchText && !task.fcontent.toLowerCase().includes(searchText.toLowerCase())) {
-      return false;
-    }
-    
-    // Filter out completed tasks if showCompleted is false
-    if (!configShowCompleted && task.status === TaskStatus.DONE) {
-      return false;
-    }
-    
-    return true;
-  }));
-
-  // Sort filtered tasks
-  let sortedTasks = $derived(() => {
-    return taskStore.sortTasks(filteredTasks, configSortBy);
-  });
-
-  // Get tasks in the appropriate display mode
-  let displayTasks = $derived(() => {
-    const tasks = taskStore.getTasksForDisplayMode(sortedTasks(), displayMode);
-    return tasks;
-  });
 
   // Methods
   function refreshData() {
@@ -107,7 +69,6 @@
     // Load saved filter state
     const savedState = filterStateService.loadSavedFilter();
     currentRange = savedState.range;
-    displayMode = savedState.displayMode;
     
     // Sync the store's filter state
     taskStore.setCurrentRange(currentRange);
@@ -153,10 +114,7 @@
     <TaskListContent 
       {app}
       {i18n}
-      {loading}
-      {error}
-      tasks={displayTasks()}
-      {displayMode}
+      {searchText}
       onRefresh={refreshData}
     />
   {/if}

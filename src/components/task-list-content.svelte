@@ -1,22 +1,71 @@
 <script lang="ts">
   import { type App } from 'siyuan';
   import { type I18N } from '../types/i18n';
+  import { configStore } from '../stores/config.store';
   import { taskStore } from '../stores/task.store';
-  import { type TaskItem, type GroupedTasks } from '../types/tasks';
+  import { type TaskItem, type GroupedTasks, TaskStatus } from '../types/tasks';
   import { TaskDisplayMode } from '../types/tasks';
   import TaskItemComponent from './task-item.svelte';
+  import { TaskProcessingService } from '../services/task-processing.service';
+  import { Logger } from '@/services/logger.service';
 
   interface Props {
     app: App;
     i18n: I18N;
-    loading: boolean;
-    error: string;
-    tasks: TaskItem[] | GroupedTasks;
-    displayMode: TaskDisplayMode;
+    searchText: string;
     onRefresh: () => void;
   }
 
-  let { app, i18n, loading, error, tasks, displayMode, onRefresh }: Props = $props();
+  let { app, i18n, searchText, onRefresh }: Props = $props();
+  
+  // Subscribe to stores
+  let tasks = $state<TaskItem[]>([]);
+  let loading = $state(false);
+  let error = $state('');
+  
+  taskStore.subscribe(state => {
+    tasks = state.tasks;
+    loading = state.loading;
+    error = state.error;
+  });
+  
+  // Get config from config store
+  let displayMode = $derived($configStore.displayMode);
+  let showCompleted = $derived($configStore.showCompleted);
+  let sortBy = $derived($configStore.sortBy);
+  Logger.debug("displayMode", displayMode);
+  Logger.debug("showCompleted", showCompleted);
+  Logger.debug("sortBy", sortBy);
+  
+  // Filter and sort tasks
+  let processedTasks = $derived(() => {
+    let filteredTasks = tasks.filter(task => {
+      // Filter by search text
+      if (searchText && !task.fcontent.toLowerCase().includes(searchText.toLowerCase())) {
+        return false;
+      }
+      
+      // Filter out completed tasks if showCompleted is false
+      if (!showCompleted && task.status === TaskStatus.DONE) {
+        return false;
+      }
+      
+      return true;
+    });
+    
+    // Sort filtered tasks
+    return taskStore.sortTasks(filteredTasks, sortBy);
+  });
+  
+  // Check if tasks are empty
+  function isTasksEmpty(): boolean {
+    return processedTasks().length === 0;
+  }
+  
+  // Get tasks in the appropriate display mode
+  let groupedProcessedTasks = $derived(() => {
+    return TaskProcessingService.groupTasksForDisplay(processedTasks(), displayMode);
+  });
 </script>
 
 <div class="task-list-content">
@@ -30,26 +79,33 @@
       <span>Error: {error}</span>
       <button onclick={onRefresh}>Retry</button>
     </div>
-  {:else if displayMode === TaskDisplayMode.ONLY_TASKS}
-    {#if !taskStore.isGroupedTasks(tasks) && tasks.length === 0}
-      <div class="empty">
-        <span>{i18n.noTasksFound || 'No tasks found'}</span>
-      </div>
-    {:else if !taskStore.isGroupedTasks(tasks)}
-      <div class="task-list">
-        {#each tasks as task (task.id)}
+  {:else if isTasksEmpty()}
+    <div class="empty">
+      <span>{i18n.noTasksFound || 'No tasks found'}</span>
+    </div>
+  {:else}
+    <div class="task-list">
+      {#if displayMode === TaskDisplayMode.ONLY_TASKS}
+        {#each processedTasks() as task (task.id)}
           <TaskItemComponent {app} {task} showMeta={false} />
         {/each}
-      </div>
-    {/if}
-  {:else}
-    {#if taskStore.isGroupedTasks(tasks) && Object.keys(tasks).length === 0}
-      <div class="empty">
-        <span>{i18n.noTasksFound || 'No tasks found'}</span>
-      </div>
-    {:else if taskStore.isGroupedTasks(tasks)}
-      <div class="task-list">
-        {#each Object.entries(tasks) as [boxId, group] (boxId)}
+      {:else if displayMode === TaskDisplayMode.NOTEBOOK_TASKS}
+        {#each Object.entries(groupedProcessedTasks() as GroupedTasks) as [boxId, group] (boxId)}
+          <div class="notebook-group">
+            <div class="notebook-header">
+              <h4>{group.notebook}</h4>
+            </div>
+            {#each Object.entries(group.documents) as [docId, docGroup] (docId)}
+              <div class="notebook-tasks">
+                {#each docGroup.tasks as task (task.id)}
+                  <TaskItemComponent {app} {task} showMeta={true} />
+                {/each}
+              </div>
+            {/each}
+          </div>
+        {/each}
+      {:else}
+        {#each Object.entries(groupedProcessedTasks() as GroupedTasks) as [boxId, group] (boxId)}
           <div class="notebook-group">
             <div class="notebook-header">
               <h4>{group.notebook}</h4>
@@ -76,8 +132,8 @@
             {/each}
           </div>
         {/each}
-      </div>
-    {/if}
+      {/if}
+    </div>
   {/if}
 </div>
 

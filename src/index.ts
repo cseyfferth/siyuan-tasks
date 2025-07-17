@@ -26,7 +26,7 @@ import {
 import { Logger } from "./services/logger.service";
 import Settings from "./components/settings.svelte";
 import { createFromObject } from "./types/dto/settings.dto";
-import { STORAGE_NAME, TASK_DOCK_TYPE } from "./libs/const";
+import { STORAGE_NAME, TASK_DOCK_TYPE } from "@/constants";
 
 type TEventSwitchProtyle = CustomEvent<
   IEventBusMap[SiyuanEvents.SWITCH_PROTYLE]
@@ -149,8 +149,8 @@ export default class TaskListPlugin extends Plugin {
 
   public openSetting(): void {
     const dialog = new Dialog({
-      title: "SettingPanel",
-      content: `<div id="SettingPanel" style="height: 100%;"></div>`,
+      title: this.t.setting.title,
+      content: `<div id="siyuanTasksSettings" style="height: 100%;"></div>`,
       width: "800px",
       destroyCallback: (/*options*/) => {
         try {
@@ -161,7 +161,7 @@ export default class TaskListPlugin extends Plugin {
       },
     });
     mount(Settings, {
-      target: dialog.element.querySelector("#SettingPanel"),
+      target: dialog.element.querySelector("#siyuanTasksSettings"),
       props: {
         i18n: this.i18n as unknown as I18N,
         plugin: this,

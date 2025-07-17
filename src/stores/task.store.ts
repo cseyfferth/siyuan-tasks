@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
 import {
   TaskRange,
   TaskStatus,
@@ -12,6 +12,7 @@ import { fetchTasksFromDB } from "../services/task-query.service";
 import { TaskFactory } from "../services/task-factory.service";
 import { TaskProcessingService } from "../services/task-processing.service";
 import { NotebookService } from "../services/notebook.service";
+import { configStore } from "./config.store";
 
 function createTaskStore() {
   const initialState: TaskState = {
@@ -22,6 +23,10 @@ function createTaskStore() {
     currentBoxInfo: { box: "", name: "" },
     notebooksCache: [],
     currentRange: TaskRange.WORKSPACE,
+    /**
+     * Currently unused.
+     * @deprecated
+     */
     currentStatus: TaskStatus.ALL,
   };
 
@@ -40,11 +45,20 @@ function createTaskStore() {
     state.subscribe((s) => (currentState = s))();
 
     try {
+      // Get current maxTasks value from config store
+      const currentConfig = get(configStore);
+
+      // As currentStatus is not used, we use showCompleted to filter tasks
+      if (currentConfig.showCompleted === false) {
+        status = TaskStatus.TODO;
+      }
+
       const rawTasks = await fetchTasksFromDB(
         range,
         status,
         () => currentState!.currentDocInfo,
-        () => currentState!.currentBoxInfo
+        () => currentState!.currentBoxInfo,
+        currentConfig.maxTasks
       );
 
       // Use TaskFactory to create TaskItems

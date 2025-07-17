@@ -3,7 +3,6 @@ import { TaskRange, TaskStatus, TaskDisplayMode } from "../types/tasks";
 export interface FilterState {
   range: TaskRange;
   status: TaskStatus;
-  displayMode: TaskDisplayMode;
   timestamp: number;
 }
 
@@ -25,7 +24,6 @@ export class FilterStateService {
     const defaultState: FilterState = {
       range: TaskRange.WORKSPACE,
       status: TaskStatus.ALL,
-      displayMode: TaskDisplayMode.ONLY_TASKS,
       timestamp: Date.now(),
     };
 
@@ -42,11 +40,6 @@ export class FilterStateService {
           status: Object.values(TaskStatus).includes(parsed.status)
             ? parsed.status
             : defaultState.status,
-          displayMode: Object.values(TaskDisplayMode).includes(
-            parsed.displayMode
-          )
-            ? parsed.displayMode
-            : defaultState.displayMode,
           timestamp: parsed.timestamp || Date.now(),
         };
 

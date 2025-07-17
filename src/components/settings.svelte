@@ -6,17 +6,19 @@
     import { configStore } from "@/stores/config.store";
     import { Plugin } from "siyuan";
     import { TaskDisplayMode } from "@/types/tasks";
-    import { STORAGE_NAME } from "@/libs/const";
+    import { STORAGE_NAME } from "@/constants";
+    import { Logger } from "@/services/logger.service";
     
-    let groups: string[] = ["General", "Layout"];
-    let focusGroup = $state(groups[0]);
-  
     interface Props {
         i18n: I18N;
         plugin: Plugin;
     }
 
     let { i18n, plugin }: Props = $props();
+
+    let groups: string[] = [i18n.setting.general, i18n.setting.layout];
+    let focusGroup = $state(groups[0]);
+  
 
     const group1Items = $derived([
         {
@@ -79,7 +81,7 @@
 
     /********** Callbacks **********/
     const onSettingChange = async (group: string, key: string, value: unknown) => {
-        console.log("onSettingChange", { group, key, value });
+        Logger.debug("onSettingChange", { group, key, value });
         
         if (group === groups[0] || group === groups[1]) {
             try {
@@ -97,9 +99,9 @@
                 
                 // Save settings to storage using plugin's saveData method
                 await plugin.saveData(STORAGE_NAME, configStore.getSettingsObject());
-                console.log("Settings saved successfully");
+                Logger.debug("Settings saved successfully");
             } catch (error) {
-                console.error("Failed to save settings:", error);
+                Logger.error("Failed to save settings:", error);
                 showMessage("Failed to save settings");
             }
         }

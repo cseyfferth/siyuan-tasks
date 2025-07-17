@@ -1,14 +1,6 @@
 import { PluginConfig, PluginSetting } from "@/stores/config.store";
 import { TaskDisplayMode } from "../tasks";
-
-export const DEFAULT_SETTINGS = {
-  autoRefresh: false,
-  refreshInterval: 30,
-  showCompleted: true,
-  maxTasks: 2000,
-  sortBy: "created",
-  displayMode: TaskDisplayMode.ONLY_TASKS,
-};
+import { DEFAULT_SETTINGS } from "@/constants";
 
 export class SettingsDTO {
   constructor(

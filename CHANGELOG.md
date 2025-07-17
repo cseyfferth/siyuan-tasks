@@ -1,5 +1,10 @@
 # Siyuan Tasks - Changelog
 
+### [1.3.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.3.0)
+
+- 🇺🇸 Add limit of tasks to settings in case of lots of old tasks
+- 🇺🇸 New Settings Dialog
+
 ### [1.2.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.2.0)
 
 - 🇺🇸 Dark Mode Support: Task list entries now properly support dark mode themes for better visibility and consistency across different SiYuan themes

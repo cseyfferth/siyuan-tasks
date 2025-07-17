@@ -38,6 +38,8 @@
   },
   "setting": {
     "title": "设置",
+    "general": "常规",
+    "layout": "布局",
     "autoRefresh": "自动刷新任务",
     "autoRefreshDesc": "切换文档时自动刷新任务",
     "refreshInterval": "刷新间隔（秒）",

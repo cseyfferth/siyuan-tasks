@@ -38,6 +38,8 @@
   },
   "setting": {
     "title": "Settings",
+    "general": "General",
+    "layout": "Layout",
     "autoRefresh": "Auto refresh tasks",
     "autoRefreshDesc": "Automatically refresh tasks when switching documents",
     "refreshInterval": "Refresh interval (seconds)",
