@@ -11,6 +11,7 @@
 import { Logger } from "@/services/logger.service";
 import { PluginConfig } from "@/stores/config.store";
 import { Plugin, Setting } from "siyuan";
+import { type ISettingUtilsItem, type TSettingItemType } from "@/libs/index";
 
 /**
  * The default function to get the value of the element

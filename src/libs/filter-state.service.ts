@@ -1,4 +1,4 @@
-import { TaskRange, TaskStatus, TaskDisplayMode } from "../types/tasks";
+import { TaskRange, TaskStatus } from "../types/tasks";
 
 export interface FilterState {
   range: TaskRange;

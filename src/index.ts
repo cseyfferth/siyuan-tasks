@@ -4,7 +4,6 @@ import {
   Model,
   Dock,
   Dialog,
-  getFrontend,
   IEventBusMap,
   IPluginDockTab,
 } from "siyuan";
@@ -34,15 +33,12 @@ type TEventSwitchProtyle = CustomEvent<
 
 export default class TaskListPlugin extends Plugin {
   customTab: () => Model;
-  private isMobile: boolean;
   private taskDock: { config: IPluginDockTab; model: Dock };
   private refreshTimer: NodeJS.Timeout | null = null;
 
   async onload() {
     this.addIcons(icons);
     i18nStore.set(this.i18n as unknown as I18N);
-    const frontEnd = getFrontend();
-    this.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
 
     this.addCommand({
       langKey: "showTaskList",

@@ -6,6 +6,7 @@
   import { type TaskItem, type GroupedTasks, TaskStatus } from '../types/tasks';
   import { TaskDisplayMode } from '../types/tasks';
   import TaskItemComponent from './task-item.svelte';
+  import TaskTree from './task-tree.svelte';
   import { TaskProcessingService } from '../services/task-processing.service';
   import { Logger } from '@/services/logger.service';
 
@@ -104,6 +105,8 @@
             {/each}
           </div>
         {/each}
+      {:else if displayMode === TaskDisplayMode.NOTEBOOK_DOCUMENT_TASKS}
+        <TaskTree {app} groupedTasks={groupedProcessedTasks() as GroupedTasks} />
       {:else}
         {#each Object.entries(groupedProcessedTasks() as GroupedTasks) as [boxId, group] (boxId)}
           <div class="notebook-group">
@@ -111,7 +114,6 @@
               <h4>{group.notebook}</h4>
             </div>
             {#each Object.entries(group.documents) as [docId, docGroup] (docId)}
-              {#if displayMode === TaskDisplayMode.NOTEBOOK_DOCUMENT_TASKS}
                 <div class="document-group">
                   <div class="document-header">
                     <h5>{docGroup.docPath}</h5>
@@ -122,13 +124,6 @@
                     {/each}
                   </div>
                 </div>
-              {:else}
-                <div class="notebook-tasks">
-                  {#each docGroup.tasks as task (task.id)}
-                    <TaskItemComponent {app} {task} showMeta={true} />
-                  {/each}
-                </div>
-              {/if}
             {/each}
           </div>
         {/each}
@@ -226,5 +221,21 @@
 
   .document-tasks, .notebook-tasks {
     padding: 4px 0;
+  }
+
+  /* Tree-specific styles for NOTEBOOK_DOCUMENT_TASKS mode */
+  :global(.task-tree) {
+    border: none;
+    background: transparent;
+  }
+
+  :global(.task-tree .notebook-group) {
+    border: none;
+    background: transparent;
+  }
+
+  :global(.task-tree .document-group) {
+    border: none;
+    background: transparent;
   }
 </style> 

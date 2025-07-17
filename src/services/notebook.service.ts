@@ -45,6 +45,18 @@ export class NotebookService {
   }
 
   /**
+   * Get notebook icon by box ID
+   */
+  static async getNotebookIcon(boxId: string): Promise<string> {
+    if (this.notebooksCache.length === 0) {
+      await this.loadNotebooks();
+    }
+
+    const notebook = this.notebooksCache.find((nb) => nb.id === boxId);
+    return notebook?.icon || "🗃";
+  }
+
+  /**
    * Clear the notebooks cache (useful for testing or when data might be stale)
    */
   static clearCache(): void {
