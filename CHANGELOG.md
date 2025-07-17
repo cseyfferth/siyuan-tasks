@@ -4,6 +4,8 @@
 
 - 🇺🇸 Add limit of tasks to settings in case of lots of old tasks
 - 🇺🇸 New Settings Dialog
+- 🇺🇸 Allow showing parent documents and/or notebooks for tasks in a tree structure
+- 🇺🇸 Notebooks and Documents show their emoji icons if set
 
 ### [1.2.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.2.0)
 

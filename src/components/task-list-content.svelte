@@ -34,9 +34,6 @@
   let displayMode = $derived($configStore.displayMode);
   let showCompleted = $derived($configStore.showCompleted);
   let sortBy = $derived($configStore.sortBy);
-  Logger.debug("displayMode", displayMode);
-  Logger.debug("showCompleted", showCompleted);
-  Logger.debug("sortBy", sortBy);
   
   // Filter and sort tasks
   let processedTasks = $derived(() => {

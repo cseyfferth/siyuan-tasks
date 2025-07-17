@@ -56,7 +56,42 @@ export class NotebookService {
     }
 
     const notebook = this.notebooksCache.find((nb) => nb.id === boxId);
-    return notebook?.icon || "🗃";
+    if (!notebook?.icon) return "🗃";
+
+    // Convert Unicode code point to emoji
+    return this.convertUnicodeToEmoji(notebook.icon);
+  }
+
+  /**
+   * Convert Unicode code point to emoji character
+   * Examples: "1f970" -> "🥰", "1f4d3" -> "📓"
+   */
+  private static convertUnicodeToEmoji(unicode: string): string {
+    try {
+      // Handle different formats
+      let codePoint: string;
+
+      if (unicode.startsWith("1f")) {
+        // Format: "1f970" -> "🥰"
+        codePoint = unicode;
+      } else if (unicode.startsWith("U+1f")) {
+        // Format: "U+1f970" -> "🥰"
+        codePoint = unicode.substring(2);
+      } else if (unicode.startsWith("\\u")) {
+        // Format: "\\u1f970" -> "🥰"
+        codePoint = unicode.substring(2);
+      } else {
+        // Assume it's already an emoji or unknown format
+        return unicode;
+      }
+
+      // Convert hex code point to emoji
+      const emoji = String.fromCodePoint(parseInt(codePoint, 16));
+      return emoji;
+    } catch (error) {
+      console.warn(`Failed to convert Unicode ${unicode} to emoji:`, error);
+      return "🗃"; // Fallback to default icon
+    }
   }
 
   /**
