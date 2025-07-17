@@ -10,16 +10,20 @@ Inspired by task management in Obsidian. Displays a panel listing all tasks acro
 - Lists all tasks in a dockable panel.
 - Click to navigate to the task.
 - Automatic and manual refresh
+- Group tasks by Document/Notebook
 - **Task Priority System**: Visual priority indicators with Jira-style chevron icons.
 - **Task Sorting**: Sort tasks by created date, updated date, content, or priority.
 
 ## Changes in last release
 
-### [1.2.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.2.0)
+### [1.3.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.3.0)
 
-- **Dark Mode Support**: Task list entries now properly support dark mode themes for better visibility and consistency across different SiYuan themes.
+- **Task Limit Settings**: Add limit of tasks to settings in case of lots of old tasks
+- **New Settings Dialog**: Improved settings interface for better user experience
+- **Tree Structure**: Allow showing parent documents and/or notebooks for tasks in a tree structure
+- **Emoji Icons**: Notebooks and Documents show their emoji icons if set (no support for custom icons yet)
 
-## Demo 
+## Demo
 
 https://github.com/user-attachments/assets/83bee894-830a-4a88-9bc9-2354becbc8c6
 
@@ -56,6 +60,22 @@ Tasks can be sorted by different criteria through the plugin settings:
 
 The sorting preference is saved and applied automatically to all task views.
 
+## Tree Structure
+
+Tasks can now be displayed in a hierarchical tree structure showing their parent documents and notebooks. This feature helps you understand the context of each task and navigate more efficiently through your knowledge base.
+
+### Tree Display Options
+
+- **Show Parent Documents**: Display the document path for each task
+- **Show Parent Notebooks**: Display the notebook name for each task
+- **Combined View**: Show both document and notebook hierarchy
+
+The tree structure makes it easier to:
+
+- Understand task context at a glance
+- Navigate to related documents quickly
+- Organize tasks by their source location
+
 ## Development
 
 This project uses [pnpm](https://pnpm.io/) as the package manager.
@@ -87,7 +107,6 @@ pnpm test
 
 ## Future Ideas
 
-- Group tasks by Document/Notebook
 - Add task due time
 - Allow to hide tasks from certain Notebook/Documents
 - Filtering by priority level

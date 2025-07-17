@@ -6,6 +6,10 @@
 - 🇺🇸 New Settings Dialog
 - 🇺🇸 Allow showing parent documents and/or notebooks for tasks in a tree structure
 - 🇺🇸 Notebooks and Documents show their emoji icons if set (no support for custom icons yet)
+- 🇨🇳 在设置中添加任务数量限制，以防大量旧任务影响性能
+- 🇨🇳 新的设置对话框
+- 🇨🇳 允许在树形结构中显示任务的父文档和/或笔记本
+- 🇨🇳 笔记本和文档显示其表情符号图标（暂不支持自定义图标）
 
 ### [1.2.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.2.0)
 

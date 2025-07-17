@@ -75,8 +75,8 @@ export class NotebookService {
       if (this.docIconCache.has(docId)) return this.docIconCache.get(docId)!;
 
       const docInfo = await getDocInfo(docId);
-      let iconCode = docInfo?.icon || docInfo?.ial?.icon;
-      let icon = iconCode ? this.convertUnicodeToEmoji(iconCode) : "📄";
+      const iconCode = docInfo?.icon || docInfo?.ial?.icon;
+      const icon = iconCode ? this.convertUnicodeToEmoji(iconCode) : "📄";
       this.docIconCache.set(docId, icon);
       return icon;
     } catch (err) {
