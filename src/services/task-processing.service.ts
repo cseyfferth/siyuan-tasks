@@ -5,6 +5,7 @@ import {
   TaskPriority,
 } from "../types/tasks";
 import { TaskAnalysisService } from "./task-analysis.service";
+import { NotebookService } from "./notebook.service";
 
 export class TaskProcessingService {
   /**
@@ -126,7 +127,39 @@ export class TaskProcessingService {
       groups[task.box].documents[docKey].tasks.push(task);
     }
 
-    return groups;
+    // Sort notebooks by the order they come from lsNotebooks
+    const sortedGroups = this.sortGroupedTasksByNotebookOrder(groups);
+
+    return sortedGroups;
+  }
+
+  /**
+   * Sort grouped tasks by notebook order from lsNotebooks
+   */
+  private static sortGroupedTasksByNotebookOrder(
+    groups: GroupedTasks
+  ): GroupedTasks {
+    // Get notebook order from NotebookService
+    const notebookOrder = NotebookService.getNotebooks().map((nb) => nb.id);
+
+    // Create a new object with notebooks in the correct order
+    const sortedGroups: GroupedTasks = {};
+
+    // Add notebooks in the order they appear in lsNotebooks
+    for (const notebookId of notebookOrder) {
+      if (groups[notebookId]) {
+        sortedGroups[notebookId] = groups[notebookId];
+      }
+    }
+
+    // Add any remaining notebooks that might not be in the order (fallback)
+    for (const [notebookId, group] of Object.entries(groups)) {
+      if (!sortedGroups[notebookId]) {
+        sortedGroups[notebookId] = group;
+      }
+    }
+
+    return sortedGroups;
   }
 
   /**

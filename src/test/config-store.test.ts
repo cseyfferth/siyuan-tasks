@@ -1,5 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { configStore, MIN_REFRESH_INTERVAL } from "../stores/config.store";
+import {
+  configStore,
+  MIN_REFRESH_INTERVAL,
+  PluginSetting,
+} from "../stores/config.store";
 import { TaskDisplayMode } from "../types/tasks";
 import { get } from "svelte/store";
 
@@ -64,17 +68,17 @@ describe("Config Store", () => {
 
   it("should enforce minimum refresh interval when setting refreshInterval", () => {
     // Test setting a value below minimum
-    configStore.setRefreshInterval(2);
+    configStore.setSetting(PluginSetting.RefreshInterval, 2);
     const config = get(configStore);
     expect(config.refreshInterval).toBe(MIN_REFRESH_INTERVAL);
 
     // Test setting a value at minimum
-    configStore.setRefreshInterval(MIN_REFRESH_INTERVAL);
+    configStore.setSetting(PluginSetting.RefreshInterval, MIN_REFRESH_INTERVAL);
     const config2 = get(configStore);
     expect(config2.refreshInterval).toBe(MIN_REFRESH_INTERVAL);
 
     // Test setting a value above minimum
-    configStore.setRefreshInterval(60);
+    configStore.setSetting(PluginSetting.RefreshInterval, 60);
     const config3 = get(configStore);
     expect(config3.refreshInterval).toBe(60);
   });

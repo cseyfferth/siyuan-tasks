@@ -1,9 +1,8 @@
-import { TaskRange, TaskStatus, TaskDisplayMode } from "../types/tasks";
+import { TaskRange, TaskStatus } from "../types/tasks";
 
 export interface FilterState {
   range: TaskRange;
   status: TaskStatus;
-  displayMode: TaskDisplayMode;
   timestamp: number;
 }
 
@@ -25,14 +24,13 @@ export class FilterStateService {
     const defaultState: FilterState = {
       range: TaskRange.WORKSPACE,
       status: TaskStatus.ALL,
-      displayMode: TaskDisplayMode.ONLY_TASKS,
       timestamp: Date.now(),
     };
 
     try {
       const savedState = localStorage.getItem(STORAGE_KEY);
       if (savedState) {
-        const parsed = JSON.parse(savedState);
+        const parsed = JSON.parse(savedState) as FilterState;
 
         // Validate and use saved values, fallback to defaults if invalid
         const state: FilterState = {
@@ -42,11 +40,6 @@ export class FilterStateService {
           status: Object.values(TaskStatus).includes(parsed.status)
             ? parsed.status
             : defaultState.status,
-          displayMode: Object.values(TaskDisplayMode).includes(
-            parsed.displayMode
-          )
-            ? parsed.displayMode
-            : defaultState.displayMode,
           timestamp: parsed.timestamp || Date.now(),
         };
 

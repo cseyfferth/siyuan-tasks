@@ -60,6 +60,7 @@ export interface BoxInfo {
 export interface Notebook {
   id: string;
   name: string;
+  icon?: string;
   closed?: boolean;
   [key: string]: unknown;
 }

@@ -38,6 +38,8 @@
   },
   "setting": {
     "title": "设置",
+    "general": "常规",
+    "layout": "布局",
     "autoRefresh": "自动刷新任务",
     "autoRefreshDesc": "切换文档时自动刷新任务",
     "refreshInterval": "刷新间隔（秒）",
@@ -45,7 +47,7 @@
     "showCompleted": "显示已完成任务",
     "showCompletedDesc": "在任务列表中包含已完成的任务",
     "maxTasks": "最大任务显示数量",
-    "maxTasksDesc": "加载和显示的最大任务数量",
+    "maxTasksDesc": "当任务数量较多时，可以调整此值以显示更多任务。",
     "sortBy": "排序方式",
     "sortByDesc": "任务列表的排序方式",
     "sortOptions": {

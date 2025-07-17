@@ -3,6 +3,8 @@ import { sql } from "../api";
 import { TaskRange, TaskStatus, DocInfo, BoxInfo } from "../types/tasks";
 import { TaskAnalysisService } from "./task-analysis.service";
 import { RawSiyuanBlock } from "./task-factory.service";
+import { DEFAULT_SETTINGS } from "@/constants";
+import { Logger } from "./logger.service";
 
 /**
  * TODO: Limit the number of tasks in case of large number of tasks
@@ -12,9 +14,15 @@ export async function fetchTasksFromDB(
   range: TaskRange,
   status: TaskStatus,
   getCurrentDocInfo: () => DocInfo,
-  getCurrentBoxInfo: () => BoxInfo
+  getCurrentBoxInfo: () => BoxInfo,
+  limit: number = DEFAULT_SETTINGS.maxTasks
 ): Promise<RawSiyuanBlock[]> {
+  Logger.info(`Fetching tasks from DB ${range} ${status} ${limit}`);
   let sqlQuery = `SELECT * FROM blocks WHERE type = '${SiyuanBlockType.ListElement}' AND subtype = 't'`;
+
+  if (status === TaskStatus.TODO) {
+    sqlQuery += ` AND (markdown LIKE '- [ ]%' OR markdown LIKE '* [ ]%' or markdown LIKE '[ ]%')`;
+  }
 
   if (range === TaskRange.DOC && getCurrentDocInfo()?.rootID) {
     sqlQuery += ` AND root_id = '${getCurrentDocInfo().rootID}'`;
@@ -22,7 +30,8 @@ export async function fetchTasksFromDB(
     sqlQuery += ` AND box = '${getCurrentBoxInfo().box}'`;
   }
 
-  sqlQuery += " ORDER BY created ASC";
+  // Ensure the newest tasks are not cut off
+  sqlQuery += ` ORDER BY created DESC LIMIT ${limit}`;
 
   const tasksResult = await sql(sqlQuery);
   if (!tasksResult || tasksResult.length === 0) {
