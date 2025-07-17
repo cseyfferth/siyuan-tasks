@@ -518,3 +518,29 @@ export async function version(): Promise<string> {
 export async function currentTime(): Promise<number> {
   return request("/api/system/currentTime", {});
 }
+
+// **************************************** Block Info ****************************************
+
+export interface IResGetDocInfo {
+  id: string;
+  rootID: string;
+  name: string;
+  refCount: number;
+  subFileCount: number;
+  refIDs: string[];
+  ial: {
+    icon?: string; // Unicode code point string, e.g. "1f4d3"
+    id: string;
+    title: string;
+    type: string;
+    updated: string;
+  };
+  icon?: string; // Unicode code point string, e.g. "1f4d3"
+  attrViews?: Array<{ id: string; name: string }>;
+}
+
+export async function getDocInfo(id: string): Promise<IResGetDocInfo> {
+  const url = "/api/block/getDocInfo";
+  const data = { id };
+  return request(url, data);
+}

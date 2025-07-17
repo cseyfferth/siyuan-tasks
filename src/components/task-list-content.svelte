@@ -8,7 +8,6 @@
   import TaskItemComponent from './task-item.svelte';
   import TaskTree from './task-tree.svelte';
   import { TaskProcessingService } from '../services/task-processing.service';
-  import { Logger } from '@/services/logger.service';
 
   interface Props {
     app: App;
@@ -88,22 +87,9 @@
           <TaskItemComponent {app} {task} showMeta={false} />
         {/each}
       {:else if displayMode === TaskDisplayMode.NOTEBOOK_TASKS}
-        {#each Object.entries(groupedProcessedTasks() as GroupedTasks) as [boxId, group] (boxId)}
-          <div class="notebook-group">
-            <div class="notebook-header">
-              <h4>{group.notebook}</h4>
-            </div>
-            {#each Object.entries(group.documents) as [docId, docGroup] (docId)}
-              <div class="notebook-tasks">
-                {#each docGroup.tasks as task (task.id)}
-                  <TaskItemComponent {app} {task} showMeta={true} />
-                {/each}
-              </div>
-            {/each}
-          </div>
-        {/each}
+        <TaskTree {app} groupedTasks={groupedProcessedTasks() as GroupedTasks} {displayMode} />
       {:else if displayMode === TaskDisplayMode.NOTEBOOK_DOCUMENT_TASKS}
-        <TaskTree {app} groupedTasks={groupedProcessedTasks() as GroupedTasks} />
+        <TaskTree {app} groupedTasks={groupedProcessedTasks() as GroupedTasks} {displayMode} />
       {:else}
         {#each Object.entries(groupedProcessedTasks() as GroupedTasks) as [boxId, group] (boxId)}
           <div class="notebook-group">
@@ -216,7 +202,7 @@
     color: var(--b3-theme-on-surface-variant);
   }
 
-  .document-tasks, .notebook-tasks {
+  .document-tasks {
     padding: 4px 0;
   }
 

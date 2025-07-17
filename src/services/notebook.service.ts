@@ -1,8 +1,10 @@
-import { lsNotebooks, getHPathByID } from "../api";
+import { lsNotebooks, getHPathByID, getDocInfo } from "../api";
 import { Notebook } from "../types/tasks";
+import { Logger } from "./logger.service";
 
 export class NotebookService {
   private static notebooksCache: Notebook[] = [];
+  private static docIconCache: Map<string, string>;
 
   /**
    * Get notebook name by box ID
@@ -60,6 +62,27 @@ export class NotebookService {
 
     // Convert Unicode code point to emoji
     return this.convertUnicodeToEmoji(notebook.icon);
+  }
+
+  /**
+   * Get document icon by document ID
+   */
+  static async getDocumentIcon(docId: string): Promise<string> {
+    if (!docId) return "📄";
+    try {
+      // Simple in-memory cache for doc icons
+      if (!this.docIconCache) this.docIconCache = new Map<string, string>();
+      if (this.docIconCache.has(docId)) return this.docIconCache.get(docId)!;
+
+      const docInfo = await getDocInfo(docId);
+      let iconCode = docInfo?.icon || docInfo?.ial?.icon;
+      let icon = iconCode ? this.convertUnicodeToEmoji(iconCode) : "📄";
+      this.docIconCache.set(docId, icon);
+      return icon;
+    } catch (err) {
+      Logger.error(`Error fetching document icon: ${docId}`, err);
+      return "📄";
+    }
   }
 
   /**
