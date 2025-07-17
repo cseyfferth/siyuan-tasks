@@ -24,7 +24,10 @@ export class NotebookService {
 
     try {
       const response = await getHPathByID(docId);
-      return response || "Unknown Document";
+      if (!response) return "Unknown Document";
+
+      // Remove leading "/" if present
+      return response.startsWith("/") ? response.slice(1) : response;
     } catch (err) {
       console.error("Error fetching document path:", err);
       return "Error/Unknown Document";
