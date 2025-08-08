@@ -10,4 +10,5 @@ export const DEFAULT_SETTINGS = {
   maxTasks: 1000,
   sortBy: "created",
   displayMode: TaskDisplayMode.ONLY_TASKS,
+  showTodayTasks: true,
 };

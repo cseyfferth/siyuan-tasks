@@ -9,6 +9,7 @@ export enum PluginSetting {
   MaxTasks = "maxTasks",
   SortBy = "sortBy",
   DisplayMode = "displayMode",
+  ShowTodayTasks = "showTodayTasks",
 }
 
 // Minimum refresh interval in seconds
@@ -21,6 +22,7 @@ export interface PluginConfig {
   maxTasks: number;
   sortBy: string;
   displayMode: TaskDisplayMode;
+  showTodayTasks: boolean;
   loading: boolean;
 }
 
@@ -32,6 +34,7 @@ function createConfigStore() {
     maxTasks: 2000,
     sortBy: "created",
     displayMode: TaskDisplayMode.ONLY_TASKS,
+    showTodayTasks: true,
     loading: true,
   });
 
@@ -81,6 +84,11 @@ function createConfigStore() {
               return config;
             }
             return { ...config, displayMode: value as TaskDisplayMode };
+          case PluginSetting.ShowTodayTasks:
+            if (typeof value !== "boolean") {
+              return config;
+            }
+            return { ...config, showTodayTasks: value };
           default:
             return config;
         }
@@ -96,6 +104,7 @@ function createConfigStore() {
         [PluginSetting.MaxTasks]: config.maxTasks,
         [PluginSetting.SortBy]: config.sortBy,
         [PluginSetting.DisplayMode]: config.displayMode,
+        [PluginSetting.ShowTodayTasks]: config.showTodayTasks,
       };
     },
 
@@ -108,6 +117,7 @@ function createConfigStore() {
         maxTasks: settings.maxTasks,
         sortBy: settings.sortBy,
         displayMode: settings.displayMode,
+        showTodayTasks: settings.showTodayTasks,
       }));
     },
   };

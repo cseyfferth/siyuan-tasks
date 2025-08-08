@@ -44,6 +44,8 @@ export interface TaskItem {
   type: string;
   subtype: string;
   docPath?: string;
+  /** Whether this task is marked for today */
+  isToday?: boolean;
 }
 
 export interface DocInfo {
