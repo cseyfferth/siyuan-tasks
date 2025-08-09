@@ -7,6 +7,7 @@
   import { TaskDisplayMode } from '../types/tasks';
   import TaskItemComponent from './task-item.svelte';
   import TaskTree from './task-tree.svelte';
+  import TodayTasks from './today-tasks.svelte';
   import { TaskProcessingService } from '../services/task-processing.service';
 
   interface Props {
@@ -33,6 +34,7 @@
   let displayMode = $derived($configStore.displayMode);
   let showCompleted = $derived($configStore.showCompleted);
   let sortBy = $derived($configStore.sortBy);
+  let showTodayTasks = $derived($configStore.showTodayTasks);
   
   // Filter and sort tasks
   let processedTasks = $derived(() => {
@@ -44,6 +46,11 @@
       
       // Filter out completed tasks if showCompleted is false
       if (!showCompleted && task.status === TaskStatus.DONE) {
+        return false;
+      }
+      
+      // Filter out today tasks from regular list if showTodayTasks is enabled
+      if (showTodayTasks && task.isToday === true) {
         return false;
       }
       
@@ -63,6 +70,11 @@
   let groupedProcessedTasks = $derived(() => {
     return TaskProcessingService.groupTasksForDisplay(processedTasks(), displayMode);
   });
+
+  // Handle task updates (for today tasks functionality)
+  function handleTaskUpdated() {
+    onRefresh();
+  }
 </script>
 
 <div class="task-list-content">
@@ -76,42 +88,55 @@
       <span>Error: {error}</span>
       <button onclick={onRefresh}>Retry</button>
     </div>
-  {:else if isTasksEmpty()}
-    <div class="empty">
-      <span>{i18n.noTasksFound || 'No tasks found'}</span>
-    </div>
   {:else}
-    <div class="task-list">
-      {#if displayMode === TaskDisplayMode.ONLY_TASKS}
-        {#each processedTasks() as task (task.id)}
-          <TaskItemComponent {app} {task} showMeta={false} />
-        {/each}
-      {:else if displayMode === TaskDisplayMode.NOTEBOOK_TASKS}
-        <TaskTree {app} groupedTasks={groupedProcessedTasks() as GroupedTasks} {displayMode} />
-      {:else if displayMode === TaskDisplayMode.NOTEBOOK_DOCUMENT_TASKS}
-        <TaskTree {app} groupedTasks={groupedProcessedTasks() as GroupedTasks} {displayMode} />
-      {:else}
-        {#each Object.entries(groupedProcessedTasks() as GroupedTasks) as [boxId, group] (boxId)}
-          <div class="notebook-group">
-            <div class="notebook-header">
-              <h4>{group.notebook}</h4>
+    <!-- Today's Tasks Section -->
+    {#if showTodayTasks}
+      <TodayTasks 
+        {app} 
+        {i18n} 
+        {tasks} 
+        onTaskUpdated={handleTaskUpdated}
+      />
+    {/if}
+
+    <!-- Regular Tasks Section -->
+    {#if isTasksEmpty()}
+      <div class="empty">
+        <span>{i18n.noTasksFound || 'No tasks found'}</span>
+      </div>
+    {:else}
+      <div class="task-list">
+        {#if displayMode === TaskDisplayMode.ONLY_TASKS}
+          {#each processedTasks() as task (task.id)}
+            <TaskItemComponent {app} {task} showMeta={false} onTaskUpdated={handleTaskUpdated} />
+          {/each}
+        {:else if displayMode === TaskDisplayMode.NOTEBOOK_TASKS}
+          <TaskTree {app} groupedTasks={groupedProcessedTasks() as GroupedTasks} {displayMode} />
+        {:else if displayMode === TaskDisplayMode.NOTEBOOK_DOCUMENT_TASKS}
+          <TaskTree {app} groupedTasks={groupedProcessedTasks() as GroupedTasks} {displayMode} />
+        {:else}
+          {#each Object.entries(groupedProcessedTasks() as GroupedTasks) as [boxId, group] (boxId)}
+            <div class="notebook-group">
+              <div class="notebook-header">
+                <h4>{group.notebook}</h4>
+              </div>
+              {#each Object.entries(group.documents) as [docId, docGroup] (docId)}
+                  <div class="document-group">
+                    <div class="document-header">
+                      <h5>{docGroup.docPath}</h5>
+                    </div>
+                    <div class="document-tasks">
+                      {#each docGroup.tasks as task (task.id)}
+                        <TaskItemComponent {app} {task} showMeta={true} onTaskUpdated={handleTaskUpdated} />
+                      {/each}
+                    </div>
+                  </div>
+              {/each}
             </div>
-            {#each Object.entries(group.documents) as [docId, docGroup] (docId)}
-                <div class="document-group">
-                  <div class="document-header">
-                    <h5>{docGroup.docPath}</h5>
-                  </div>
-                  <div class="document-tasks">
-                    {#each docGroup.tasks as task (task.id)}
-                      <TaskItemComponent {app} {task} showMeta={true} />
-                    {/each}
-                  </div>
-                </div>
-            {/each}
-          </div>
-        {/each}
-      {/if}
-    </div>
+          {/each}
+        {/if}
+      </div>
+    {/if}
   {/if}
 </div>
 
@@ -208,16 +233,6 @@
 
   /* Tree-specific styles for NOTEBOOK_DOCUMENT_TASKS mode */
   :global(.task-tree) {
-    border: none;
-    background: transparent;
-  }
-
-  :global(.task-tree .notebook-group) {
-    border: none;
-    background: transparent;
-  }
-
-  :global(.task-tree .document-group) {
     border: none;
     background: transparent;
   }

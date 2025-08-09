@@ -9,6 +9,11 @@
   "errorFetchingNotebookInfo": "Error fetching notebook info for task:",
   "errorFetchingDocumentPath": "Error fetching document path for task:",
   "pluginTitle": "Task List",
+  "todayTasks": {
+    "title": "Today's Tasks",
+    "addToToday": "Add to Today's Tasks",
+    "removeFromToday": "Remove from Today's Tasks"
+  },
   "options": {
     "refresh": "Refresh",
     "search": "Search",
@@ -62,6 +67,8 @@
       "onlyTasks": "Only Tasks",
       "notebookDocumentTasks": "Notebook, Document, Tasks",
       "notebookTasks": "Notebook, Tasks"
-    }
+    },
+    "showTodayTasks": "Show Today's Tasks",
+    "showTodayTasksDesc": "Display a separate section for today's tasks at the top of the list"
   }
 }

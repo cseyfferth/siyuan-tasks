@@ -21,6 +21,7 @@ export default {
   preprocess: vitePreprocess(),
   onwarn: (warning, handler) => {
     // suppress warnings on `vite dev` and `vite build`; but even without this, things still work
+    if (warning.code.includes("a11y")) return;
     if (NoWarns.has(warning.code)) return;
     handler(warning);
   },

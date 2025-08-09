@@ -4,24 +4,29 @@
   "name": "思源",
   "dockTitle": "所有任务",
   "refreshTasks": "刷新任务",
-  "noTasksFound": "未找到任何任务。",
+  "noTasksFound": "未找到任务。",
   "errorFetchingTasks": "获取任务时出错：",
-  "errorFetchingNotebookInfo": "获取任务所在笔记本信息时出错：",
-  "errorFetchingDocumentPath": "获取任务所在文档路径时出错：",
+  "errorFetchingNotebookInfo": "获取任务笔记本信息时出错：",
+  "errorFetchingDocumentPath": "获取任务文档路径时出错：",
   "pluginTitle": "任务列表",
+  "todayTasks": {
+    "title": "今日任务",
+    "addToToday": "添加到今日任务",
+    "removeFromToday": "从今日任务中移除"
+  },
   "options": {
     "refresh": "刷新",
     "search": "搜索",
     "filter": "筛选",
     "expand": "展开",
-    "collapse": "收起"
+    "collapse": "折叠"
   },
-  "wait": "插入等待表情",
-  "waitDesc": "在当前光标位置插入 ⏳ 以标记任务为等待状态",
+  "wait": "标记此任务稍后完成",
+  "getTab": "获取标签页",
   "range": {
     "doc": "文档",
     "box": "笔记本",
-    "workspace": "工作空间"
+    "workspace": "工作区"
   },
   "searchPlaceholder": "搜索任务...",
   "priority": {
@@ -62,6 +67,8 @@
       "onlyTasks": "仅任务",
       "notebookDocumentTasks": "笔记本、文档、任务",
       "notebookTasks": "笔记本、任务"
-    }
+    },
+    "showTodayTasks": "显示今日任务",
+    "showTodayTasksDesc": "在任务列表顶部显示单独的今日任务区域"
   }
 }

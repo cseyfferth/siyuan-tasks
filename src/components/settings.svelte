@@ -50,6 +50,13 @@
             description: i18n.setting.showCompletedDesc,
         },
         {
+            key: PluginSetting.ShowTodayTasks,
+            value: $configStore.showTodayTasks,
+            type: "checkbox" as const,
+            title: i18n.setting.showTodayTasks,
+            description: i18n.setting.showTodayTasksDesc,
+        },
+        {
             key: PluginSetting.SortBy,
             value: $configStore.sortBy,
             type: "select" as const,
