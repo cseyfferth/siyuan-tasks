@@ -1,5 +1,16 @@
 # Siyuan Tasks - Changelog
 
+### [1.4.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.4.0)
+
+- 🇺🇸 Today's Tasks: A dedicated section at the top of the list for tasks you mark for today
+- 🇺🇸 Drag & Drop: Drag any task to the Today header to add it
+- 🇺🇸 Context menu: Right-click a task to add/remove it from Today
+- 🇺🇸 Settings: Toggle Today section visibility
+- 🇨🇳 今日任务：在列表顶部新增“今日任务”区域，可将任务标记为今日待办
+- 🇨🇳 拖放支持：将任何任务拖拽到“今日任务”标题即可添加
+- 🇨🇳 右键菜单：右键任务可添加/移除“今日任务”
+- 🇨🇳 设置支持：可在设置中显示/隐藏“今日任务”；搜索与排序同样应用于“今日任务”
+
 ### [1.3.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.3.0)
 
 - 🇺🇸 Add limit of tasks to settings in case of lots of old tasks
