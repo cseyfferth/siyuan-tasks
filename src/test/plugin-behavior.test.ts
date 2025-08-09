@@ -32,6 +32,7 @@ describe("Plugin Behavior on Page Reload", () => {
       autoRefresh: true,
       refreshInterval: 30,
       showCompleted: true,
+      showTodayTasks: true,
       maxTasks: 100,
       sortBy: "created",
       displayMode: "only_tasks" as any,
@@ -51,6 +52,7 @@ describe("Plugin Behavior on Page Reload", () => {
       autoRefresh: false,
       refreshInterval: 60,
       showCompleted: false,
+      showTodayTasks: false,
       maxTasks: 200,
       sortBy: "priority",
       displayMode: "notebook_tasks",
@@ -60,6 +62,7 @@ describe("Plugin Behavior on Page Reload", () => {
       .mockReturnValueOnce(false) // autoRefresh: false
       .mockReturnValueOnce(60) // refreshInterval: 60
       .mockReturnValueOnce(false) // showCompleted: false
+      .mockReturnValueOnce(true) // showTodayTasks: true
       .mockReturnValueOnce(200) // maxTasks: 200
       .mockReturnValueOnce("priority") // sortBy: priority
       .mockReturnValueOnce("notebook_tasks"); // displayMode: notebook_tasks
@@ -74,6 +77,7 @@ describe("Plugin Behavior on Page Reload", () => {
         autoRefresh: mockSettingUtils.get("autoRefresh") as boolean,
         refreshInterval: mockSettingUtils.get("refreshInterval") as number,
         showCompleted: mockSettingUtils.get("showCompleted") as boolean,
+        showTodayTasks: mockSettingUtils.get("showTodayTasks") as boolean,
         maxTasks: mockSettingUtils.get("maxTasks") as number,
         sortBy: mockSettingUtils.get("sortBy") as string,
         displayMode: mockSettingUtils.get("displayMode") as any,
@@ -89,6 +93,7 @@ describe("Plugin Behavior on Page Reload", () => {
     expect(config.autoRefresh).toBe(false);
     expect(config.refreshInterval).toBe(60);
     expect(config.showCompleted).toBe(false);
+    expect(config.showTodayTasks).toBe(true);
     expect(config.maxTasks).toBe(200);
     expect(config.sortBy).toBe("priority");
     expect(config.displayMode).toBe("notebook_tasks");
@@ -116,6 +121,7 @@ describe("Plugin Behavior on Page Reload", () => {
       .mockReturnValueOnce(true) // autoRefresh
       .mockReturnValueOnce(30) // refreshInterval
       .mockReturnValueOnce(false) // showCompleted: false
+      .mockReturnValueOnce(true) // showTodayTasks: true
       .mockReturnValueOnce(100) // maxTasks
       .mockReturnValueOnce("priority") // sortBy: priority
       .mockReturnValueOnce("only_tasks"); // displayMode
@@ -128,6 +134,7 @@ describe("Plugin Behavior on Page Reload", () => {
       autoRefresh: mockSettingUtils.get("autoRefresh") as boolean,
       refreshInterval: mockSettingUtils.get("refreshInterval") as number,
       showCompleted: mockSettingUtils.get("showCompleted") as boolean,
+      showTodayTasks: mockSettingUtils.get("showTodayTasks") as boolean,
       maxTasks: mockSettingUtils.get("maxTasks") as number,
       sortBy: mockSettingUtils.get("sortBy") as string,
       displayMode: mockSettingUtils.get("displayMode") as any,
@@ -214,6 +221,7 @@ describe("Plugin Behavior on Page Reload", () => {
         autoRefresh: true,
         refreshInterval: 30,
         showCompleted: showCompleted ?? true, // Default to true if undefined
+        showTodayTasks: true,
         maxTasks: 100,
         sortBy: sortBy ?? "created", // Default to 'created' if undefined
         displayMode: "only_tasks" as any,

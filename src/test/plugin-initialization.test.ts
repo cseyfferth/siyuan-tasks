@@ -43,6 +43,7 @@ describe("Plugin Initialization", () => {
     configStore.set({
       autoRefresh: true,
       refreshInterval: 30,
+      showTodayTasks: true,
       showCompleted: true,
       maxTasks: 100,
       sortBy: "created",
@@ -70,6 +71,7 @@ describe("Plugin Initialization", () => {
       .mockReturnValueOnce(false) // autoRefresh
       .mockReturnValueOnce(60) // refreshInterval
       .mockReturnValueOnce(false) // showCompleted
+      .mockReturnValueOnce(true) // showTodayTasks
       .mockReturnValueOnce(200) // maxTasks
       .mockReturnValueOnce("priority") // sortBy
       .mockReturnValueOnce("notebook_tasks"); // displayMode
@@ -84,6 +86,7 @@ describe("Plugin Initialization", () => {
         autoRefresh: mockSettingUtils.get("autoRefresh") as boolean,
         refreshInterval: mockSettingUtils.get("refreshInterval") as number,
         showCompleted: mockSettingUtils.get("showCompleted") as boolean,
+        showTodayTasks: mockSettingUtils.get("showTodayTasks") as boolean,
         maxTasks: mockSettingUtils.get("maxTasks") as number,
         sortBy: mockSettingUtils.get("sortBy") as string,
         displayMode: mockSettingUtils.get("displayMode") as any,
@@ -163,6 +166,7 @@ describe("Plugin Initialization", () => {
         autoRefresh: true,
         refreshInterval: 30,
         showCompleted: showCompleted ?? true, // Default to true if undefined
+        showTodayTasks: true,
         maxTasks: 100,
         sortBy: sortBy ?? "created", // Default to 'created' if undefined
         displayMode: "only_tasks" as any,
@@ -205,6 +209,7 @@ describe("Plugin Initialization", () => {
     configStore.set({
       autoRefresh: mockSettingUtils.get("autoRefresh") as boolean,
       refreshInterval: mockSettingUtils.get("refreshInterval") as number,
+      showTodayTasks: true,
       showCompleted: mockSettingUtils.get("showCompleted") as boolean,
       maxTasks: mockSettingUtils.get("maxTasks") as number,
       sortBy: mockSettingUtils.get("sortBy") as string,

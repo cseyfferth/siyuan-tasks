@@ -9,7 +9,8 @@ export class SettingsDTO {
     public readonly showCompleted: boolean,
     public readonly maxTasks: number,
     public readonly sortBy: string,
-    public readonly displayMode: TaskDisplayMode
+    public readonly displayMode: TaskDisplayMode,
+    public readonly showTodayTasks: boolean
   ) {}
 }
 
@@ -20,7 +21,8 @@ export const createDefaultSettingsDTO = (): SettingsDTO => {
     DEFAULT_SETTINGS.showCompleted,
     DEFAULT_SETTINGS.maxTasks,
     DEFAULT_SETTINGS.sortBy,
-    DEFAULT_SETTINGS.displayMode
+    DEFAULT_SETTINGS.displayMode,
+    DEFAULT_SETTINGS.showTodayTasks
   );
 };
 
@@ -33,7 +35,8 @@ export const createFromObject = (
     settings[PluginSetting.ShowCompleted] ?? DEFAULT_SETTINGS.showCompleted,
     settings[PluginSetting.MaxTasks] ?? DEFAULT_SETTINGS.maxTasks,
     settings[PluginSetting.SortBy] ?? DEFAULT_SETTINGS.sortBy,
-    settings[PluginSetting.DisplayMode] ?? DEFAULT_SETTINGS.displayMode
+    settings[PluginSetting.DisplayMode] ?? DEFAULT_SETTINGS.displayMode,
+    settings[PluginSetting.ShowTodayTasks] ?? DEFAULT_SETTINGS.showTodayTasks
   );
 };
 
@@ -46,6 +49,7 @@ export const createFromSettingsStore = (
     settings.showCompleted,
     settings.maxTasks,
     settings.sortBy,
-    settings.displayMode
+    settings.displayMode,
+    settings.showTodayTasks
   );
 };

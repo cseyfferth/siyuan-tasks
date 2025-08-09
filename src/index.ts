@@ -2,14 +2,15 @@ import {
   Protyle,
   Plugin,
   Model,
-  Dock,
   Dialog,
   IEventBusMap,
   IPluginDockTab,
+  Custom,
+  MobileCustom,
 } from "siyuan";
 import "@/index.scss";
 
-import TaskList from "@/components/task-list.svelte";
+import TaskListView from "@/views/task-list-view.svelte";
 
 import { icons } from "./libs/icons";
 import { i18nStore } from "./stores/i18n.store";
@@ -23,7 +24,7 @@ import {
   type PluginConfig,
 } from "./stores/config.store";
 import { Logger } from "./services/logger.service";
-import Settings from "./components/settings.svelte";
+import SettingsView from "@/views/settings-view.svelte";
 import { createFromObject } from "./types/dto/settings.dto";
 import { STORAGE_NAME, TASK_DOCK_TYPE } from "@/constants";
 
@@ -33,7 +34,7 @@ type TEventSwitchProtyle = CustomEvent<
 
 export default class TaskListPlugin extends Plugin {
   customTab: () => Model;
-  private taskDock: { config: IPluginDockTab; model: Dock };
+  private taskDock: { config: IPluginDockTab; model: Custom | MobileCustom };
   private refreshTimer: NodeJS.Timeout | null = null;
 
   async onload() {
@@ -48,7 +49,7 @@ export default class TaskListPlugin extends Plugin {
         // Toggle the task list dock
         if (this.taskDock && this.taskDock.model.element) {
           // This will toggle the dock visibility
-          const el = this.taskDock.model.element;
+          const el = this.taskDock.model.element as unknown as HTMLElement;
           el.style.display = el.style.display === "none" ? "block" : "none";
         }
       },
@@ -83,10 +84,9 @@ export default class TaskListPlugin extends Plugin {
       update() {
         // console.log("Task list dock update");
       },
-      init: (dockInstance: Dock) => {
-        // Create Svelte component for task list
-        mount(TaskList, {
-          target: dockInstance.element,
+      init: (dock) => {
+        mount(TaskListView, {
+          target: dock.element,
           props: {
             app: this.app,
             i18n: this.i18n as unknown as I18N,
@@ -150,13 +150,13 @@ export default class TaskListPlugin extends Plugin {
       width: "800px",
       destroyCallback: (/*options*/) => {
         try {
-          unmount(Settings);
+          unmount(SettingsView);
         } catch (error) {
           Logger.debug("Failed to unmount settings:", error);
         }
       },
     });
-    mount(Settings, {
+    mount(SettingsView, {
       target: dialog.element.querySelector("#siyuanTasksSettings"),
       props: {
         i18n: this.i18n as unknown as I18N,

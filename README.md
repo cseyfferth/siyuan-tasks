@@ -13,15 +13,16 @@ Inspired by task management in Obsidian. Displays a panel listing all tasks acro
 - Group tasks by Document/Notebook
 - **Task Priority System**: Visual priority indicators with Jira-style chevron icons.
 - **Task Sorting**: Sort tasks by created date, updated date, content, or priority.
+- **Today's Tasks**: Pin tasks to a dedicated Today section at the top, with drag & drop and context menu support.
 
 ## Changes in last release
 
-### [1.3.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.3.0)
+### [1.4.0](https://github.com/Macavity/siyuan-tasks/releases/tag/v1.4.0)
 
-- **Task Limit Settings**: Add limit of tasks to settings in case of lots of old tasks
-- **New Settings Dialog**: Improved settings interface for better user experience
-- **Tree Structure**: Allow showing parent documents and/or notebooks for tasks in a tree structure
-- **Emoji Icons**: Notebooks and Documents show their emoji icons if set (no support for custom icons yet)
+- Today's Tasks section at the top of the list
+- Drag a task onto the Today header to add it
+- Right-click any task to add/remove it from Today
+- Setting to show/hide Today
 
 ## Demo
 

@@ -1,16 +1,15 @@
 <script lang="ts">
-  import { type App } from 'siyuan';
   import { type GroupedTasks, TaskDisplayMode } from '../types/tasks';
   import TaskItemComponent from './task-item.svelte';
   import { NotebookService } from '../services/notebook.service';
+  import Chevron from '@/components/ui/chevron.svelte';
 
   interface Props {
-    app: App;
     groupedTasks: GroupedTasks;
     displayMode: TaskDisplayMode;
   }
 
-  let { app, groupedTasks, displayMode }: Props = $props();
+  let { groupedTasks, displayMode }: Props = $props();
 
   // State for expanded/collapsed items - expanded by default
   let expandedNotebooks = $state<Set<string>>(new Set());
@@ -73,9 +72,7 @@
         aria-expanded={expandedNotebooks.has(boxId)}
       >
         <div class="tree-toggle">
-          <svg class="chevron{expandedNotebooks.has(boxId) ? ' expanded' : ''}" width="12" height="12" viewBox="0 0 12 12">
-            <path d="M4 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+          <Chevron expanded={expandedNotebooks.has(boxId)} />
         </div>
         <div class="tree-icon">
           {#await NotebookService.getNotebookIcon(boxId) then icon}
@@ -96,7 +93,7 @@
             {#each Object.entries(group.documents) as [docId, docGroup] (docId)}
               {#each docGroup.tasks as task (task.id)}
                 <div class="tree-task" style="padding-left: 20px;">
-                  <TaskItemComponent {app} {task} />
+                  <TaskItemComponent {task} />
                 </div>
               {/each}
             {/each}
@@ -114,9 +111,7 @@
                   aria-expanded={expandedDocuments.has(docId)}
                 >
                   <div class="tree-toggle">
-                        <svg class="chevron {expandedDocuments.has(docId) ? 'expanded' : ''}" width="12" height="12">
-                          <use href="#iconRight" />
-                        </svg>
+                    <Chevron expanded={expandedDocuments.has(docId)} />
                   </div>
                   <div class="tree-icon">
                     {#await NotebookService.getDocumentIcon(docId) then icon}
@@ -134,7 +129,7 @@
                   <div class="tree-content">
                     {#each docGroup.tasks as task (task.id)}
                       <div class="tree-task" style="padding-left: 1.6rem;">
-                        <TaskItemComponent {app} {task}/>
+                        <TaskItemComponent {task}/>
                       </div>
                     {/each}
                   </div>
@@ -205,11 +200,4 @@
     margin-left: 1rem;
   }
 
-  .chevron {
-    transition: transform 0.2s ease;
-    fill: var(--b3-theme-on-surface-variant);
-  }
-  .chevron.expanded {
-    transform: rotate(90deg);
-  }
 </style> 

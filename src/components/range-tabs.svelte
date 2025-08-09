@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { type I18N } from '../types/i18n';
-  import { TaskRange } from '../types/tasks';
+  import { TaskRange } from '@/types/tasks';
+  import { i18nStore } from '@/stores/i18n.store';
 
   interface Props {
-    i18n: I18N;
     currentRange: TaskRange;
     onRangeChange: (range: TaskRange) => void;
   }
 
-  let { i18n, currentRange, onRangeChange }: Props = $props();
+  let { currentRange, onRangeChange }: Props = $props();
+  let i18n = $derived($i18nStore);
 </script>
 
 <div class="range-tabs">

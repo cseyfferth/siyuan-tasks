@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { type I18N } from '../types/i18n';
+  import { i18nStore } from '@/stores/i18n.store';
 
   interface Props {
-    i18n: I18N;
     searchText: string;
     onSearchChange: (value: string) => void;
   }
 
-  let { i18n, searchText, onSearchChange }: Props = $props();
+  let { searchText, onSearchChange }: Props = $props();
+  let i18n = $derived($i18nStore);
 </script>
 
 <div class="search-wrap">
