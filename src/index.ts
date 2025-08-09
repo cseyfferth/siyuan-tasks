@@ -9,7 +9,7 @@ import {
 } from "siyuan";
 import "@/index.scss";
 
-import TaskList from "@/components/task-list.svelte";
+import TaskListView from "@/views/task-list-view.svelte";
 
 import { icons } from "./libs/icons";
 import { i18nStore } from "./stores/i18n.store";
@@ -23,7 +23,7 @@ import {
   type PluginConfig,
 } from "./stores/config.store";
 import { Logger } from "./services/logger.service";
-import Settings from "./components/settings.svelte";
+import SettingsView from "@/views/settings-view.svelte";
 import { createFromObject } from "./types/dto/settings.dto";
 import { STORAGE_NAME, TASK_DOCK_TYPE } from "@/constants";
 
@@ -84,8 +84,8 @@ export default class TaskListPlugin extends Plugin {
         // console.log("Task list dock update");
       },
       init: (dockInstance: Dock) => {
-        // Create Svelte component for task list
-        mount(TaskList, {
+        // Create Svelte view for task list
+        mount(TaskListView, {
           target: dockInstance.element,
           props: {
             app: this.app,
@@ -150,13 +150,13 @@ export default class TaskListPlugin extends Plugin {
       width: "800px",
       destroyCallback: (/*options*/) => {
         try {
-          unmount(Settings);
+          unmount(SettingsView);
         } catch (error) {
           Logger.debug("Failed to unmount settings:", error);
         }
       },
     });
-    mount(Settings, {
+    mount(SettingsView, {
       target: dialog.element.querySelector("#siyuanTasksSettings"),
       props: {
         i18n: this.i18n as unknown as I18N,

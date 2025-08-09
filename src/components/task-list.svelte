@@ -1,7 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { type App } from 'siyuan';
-  import { type I18N } from '../types/i18n';
   import { taskStore } from '../stores/task.store';
   import { TaskRange, TaskStatus } from '../types/tasks';
   import { filterStateService, type FilterState } from '../libs/filter-state.service';
@@ -10,13 +8,6 @@
   import TaskSearch from './task-search.svelte';
   import TaskListContent from './task-list-content.svelte';
   import { configStore } from '../stores/config.store';
-
-  interface Props {
-    app: App;
-    i18n: I18N;
-  }
-
-  let { app, i18n }: Props = $props();
 
   // Local state for UI
   let currentRange = $state<TaskRange>(TaskRange.DOC);
@@ -93,27 +84,22 @@
     </div>
   {:else}
     <TaskHeader 
-      {i18n}
       {isExpanded}
       onRefresh={refreshData}
       onToggleExpanded={() => isExpanded = !isExpanded}
     />
 
     <RangeTabs 
-      {i18n}
       {currentRange}
       onRangeChange={handleRangeChange}
     />
 
     <TaskSearch 
-      {i18n}
       {searchText}
       onSearchChange={handleSearchChange}
     />
 
     <TaskListContent 
-      {app}
-      {i18n}
       {searchText}
       onRefresh={refreshData}
     />

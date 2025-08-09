@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { type App } from 'siyuan';
-  import { type I18N } from '../types/i18n';
   import { configStore } from '../stores/config.store';
   import { taskStore } from '../stores/task.store';
   import { type TaskItem, type GroupedTasks, TaskStatus } from '../types/tasks';
@@ -9,15 +7,17 @@
   import TaskTree from './task-tree.svelte';
   import TodayTasks from './today-tasks.svelte';
   import { TaskProcessingService } from '../services/task-processing.service';
+  import { i18nStore } from '@/stores/i18n.store';
 
   interface Props {
-    app: App;
-    i18n: I18N;
     searchText: string;
     onRefresh: () => void;
   }
 
-  let { app, i18n, searchText, onRefresh }: Props = $props();
+  let { searchText, onRefresh }: Props = $props();
+  
+  // Globals from stores
+  let i18n = $derived($i18nStore);
   
   // Subscribe to stores
   let tasks = $state<TaskItem[]>([]);
@@ -92,8 +92,6 @@
     <!-- Today's Tasks Section -->
     {#if showTodayTasks}
       <TodayTasks 
-        {app} 
-        {i18n} 
         {tasks} 
         onTaskUpdated={handleTaskUpdated}
       />
@@ -108,12 +106,12 @@
       <div class="task-list">
         {#if displayMode === TaskDisplayMode.ONLY_TASKS}
           {#each processedTasks() as task (task.id)}
-            <TaskItemComponent {app} {task} showMeta={false} onTaskUpdated={handleTaskUpdated} />
+            <TaskItemComponent {task} showMeta={false} onTaskUpdated={handleTaskUpdated} />
           {/each}
         {:else if displayMode === TaskDisplayMode.NOTEBOOK_TASKS}
-          <TaskTree {app} groupedTasks={groupedProcessedTasks() as GroupedTasks} {displayMode} />
+          <TaskTree groupedTasks={groupedProcessedTasks() as GroupedTasks} {displayMode} />
         {:else if displayMode === TaskDisplayMode.NOTEBOOK_DOCUMENT_TASKS}
-          <TaskTree {app} groupedTasks={groupedProcessedTasks() as GroupedTasks} {displayMode} />
+          <TaskTree groupedTasks={groupedProcessedTasks() as GroupedTasks} {displayMode} />
         {:else}
           {#each Object.entries(groupedProcessedTasks() as GroupedTasks) as [boxId, group] (boxId)}
             <div class="notebook-group">
@@ -127,7 +125,7 @@
                     </div>
                     <div class="document-tasks">
                       {#each docGroup.tasks as task (task.id)}
-                        <TaskItemComponent {app} {task} showMeta={true} onTaskUpdated={handleTaskUpdated} />
+                        <TaskItemComponent {task} showMeta={true} onTaskUpdated={handleTaskUpdated} />
                       {/each}
                     </div>
                   </div>

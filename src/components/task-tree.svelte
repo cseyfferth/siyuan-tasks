@@ -1,16 +1,14 @@
 <script lang="ts">
-  import { type App } from 'siyuan';
   import { type GroupedTasks, TaskDisplayMode } from '../types/tasks';
   import TaskItemComponent from './task-item.svelte';
   import { NotebookService } from '../services/notebook.service';
 
   interface Props {
-    app: App;
     groupedTasks: GroupedTasks;
     displayMode: TaskDisplayMode;
   }
 
-  let { app, groupedTasks, displayMode }: Props = $props();
+  let { groupedTasks, displayMode }: Props = $props();
 
   // State for expanded/collapsed items - expanded by default
   let expandedNotebooks = $state<Set<string>>(new Set());
@@ -96,7 +94,7 @@
             {#each Object.entries(group.documents) as [docId, docGroup] (docId)}
               {#each docGroup.tasks as task (task.id)}
                 <div class="tree-task" style="padding-left: 20px;">
-                  <TaskItemComponent {app} {task} />
+                  <TaskItemComponent {task} />
                 </div>
               {/each}
             {/each}
@@ -134,7 +132,7 @@
                   <div class="tree-content">
                     {#each docGroup.tasks as task (task.id)}
                       <div class="tree-task" style="padding-left: 1.6rem;">
-                        <TaskItemComponent {app} {task}/>
+                        <TaskItemComponent {task}/>
                       </div>
                     {/each}
                   </div>

@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { type I18N } from '../types/i18n';
   import Button from './ui/button.svelte';
+  import { i18nStore } from '@/stores/i18n.store';
 
   interface Props {
-    i18n: I18N;
     isExpanded: boolean;
     onRefresh: () => void;
     onToggleExpanded: () => void;
   }
 
-  let { i18n, isExpanded, onRefresh, onToggleExpanded }: Props = $props();
+  let { isExpanded, onRefresh, onToggleExpanded }: Props = $props();
+  let i18n = $derived($i18nStore);
 </script>
 
 <div class="task-header">

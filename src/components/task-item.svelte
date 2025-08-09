@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { type App, openTab } from 'siyuan';
+  import { openTab } from 'siyuan';
   import { type TaskItem } from '../types/tasks';
   import { TaskStatus, TaskPriority } from '../types/tasks';
   import { TaskMetadataService } from '../services/task-metadata.service';
   import ContextMenu from './ui/context-menu.svelte';
-  import { type I18N } from '../types/i18n';
+  import { i18nStore } from '@/stores/i18n.store';
+  import { appStore } from '@/stores/app.store';
 
   interface Props {
-    app: App;
     task: TaskItem;
-    i18n: I18N;
     showMeta?: boolean;
     onTaskUpdated?: () => void;
   }
 
-  let { app, task, i18n, showMeta = false, onTaskUpdated }: Props = $props();
+  let { task, showMeta = false, onTaskUpdated }: Props = $props();
+  let i18n = $derived($i18nStore);
 
   // Context menu state
   let showContextMenu = $state(false);
@@ -25,7 +25,7 @@
   function handleTaskClick() {
     if (task.root_id) {
       openTab({
-        app: app,
+        app: $appStore,
         doc: {
           id: task.root_id,
           zoomIn: false,

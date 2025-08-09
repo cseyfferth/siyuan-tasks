@@ -1,21 +1,21 @@
 <script lang="ts">
-  import { type App } from 'siyuan';
-  import { type I18N } from '../types/i18n';
   import { type TaskItem } from '../types/tasks';
   import TaskItemComponent from './task-item.svelte';
   import { TaskMetadataService } from '../services/task-metadata.service';
   import { onMount, onDestroy } from 'svelte';
+  import { i18nStore } from '@/stores/i18n.store';
 
   interface Props {
-    app: App;
-    i18n: I18N;
     tasks: TaskItem[];
     isExpanded?: boolean;
     onToggleExpanded?: () => void;
     onTaskUpdated?: () => void;
   }
 
-  let { app, i18n, tasks, isExpanded = true, onToggleExpanded, onTaskUpdated }: Props = $props();
+  let { tasks, isExpanded = true, onToggleExpanded, onTaskUpdated }: Props = $props();
+
+  // Globals from stores
+  let i18n = $derived($i18nStore);
 
   // Filter tasks that are marked for today
   let todayTasks = $derived(() => {
@@ -51,7 +51,6 @@
     document.addEventListener('dragover', (e) => {
       e.preventDefault(); // This is crucial to prevent drag cancellation
       if (!isDragging) {
-        console.log('Document dragover detected, setting isDragging to true');
         isDragging = true;
       }
     });
@@ -59,7 +58,6 @@
     // Also listen for drop on document to handle cases where drop happens outside our drop zone
     document.addEventListener('drop', (e) => {
       e.preventDefault();
-      console.log('Document drop detected');
       isDragging = false;
       isDragOver = false;
     });
@@ -94,7 +92,6 @@
   // Handle drop event
   async function handleDrop(event: DragEvent) {
     event.preventDefault();
-    event.stopPropagation();
     isDragOver = false;
     isDragging = false; // Also set isDragging to false when drop happens
 
@@ -130,7 +127,7 @@
     {#if isExpanded}
       <div class="today-tasks-list">
         {#each todayTasks() as task (task.id)}
-          <TaskItemComponent {app} {task} showMeta={false} onTaskUpdated={onTaskUpdated} />
+          <TaskItemComponent {task} showMeta={false} onTaskUpdated={onTaskUpdated} />
         {/each}
       </div>
     {/if}
@@ -149,7 +146,7 @@
       <use href="#iconCalendar"></use>
     </svg>
     <span class="drop-title">{i18n.todayTasks?.title || "Today's Tasks"}</span>
-    <span class="drop-hint">{i18n.todayTasks?.dropHint || 'Drop tasks here to add to today'}</span>
+    <span class="drop-hint">{i18n.todayTasks?.addToToday || 'Drop tasks here to add to today'}</span>
   </div>
 </div>
 
