@@ -11,11 +11,10 @@
     tasks: TaskItem[];
     searchText?: string;
     isExpanded?: boolean;
-    onToggleExpanded?: () => void;
     onTaskUpdated?: () => void;
   }
 
-  let { tasks, searchText = '', isExpanded = true, onToggleExpanded, onTaskUpdated }: Props = $props();
+  let { tasks, searchText = '', isExpanded = true, onTaskUpdated }: Props = $props();
 
   // Globals
   let i18n = $derived($i18nStore as I18N);
@@ -122,19 +121,36 @@
       }
     }
   }
+
+  function toggleExpanded() {
+    isExpanded = !isExpanded;
+  }
 </script>
 
 {#if hasTodayTasks()}
   <div class="today-tasks-section">
-    <div class="today-header" onclick={onToggleExpanded} onkeydown={(e) => e.key === 'Enter' && onToggleExpanded?.()} role="button" tabindex="0">
-      <div class="today-title">
+    <div
+      class="today-header"
+      role="button"
+      tabindex="0"
+      aria-expanded={isExpanded}
+      aria-controls="today-panel"
+      onclick={toggleExpanded}
+      onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), toggleExpanded())}
+    >
+      <div class="today-title" role="heading" aria-level="4">
+        <div class="tree-toggle">
+          <svg class="chevron {isExpanded ? 'expanded' : ''}" width="12" height="12">
+            <use href="#iconRight" />
+          </svg>
+        </div>
         <svg class="icon" width="16" height="16">
           <use href="#iconCalendar"></use>
         </svg>
         <span>{i18n.todayTasks?.title || "Today's Tasks"}</span>
         <span class="task-count">({todayTasks().length})</span>
       </div>
-      <div class="expand-icon">
+      <div class="expand-icon" aria-hidden="true">
         <svg class="icon" width="12" height="12">
           <use href={isExpanded ? "#iconChevronUp" : "#iconChevronDown"}></use>
         </svg>
@@ -142,9 +158,11 @@
     </div>
     
     {#if isExpanded}
-      <div class="today-tasks-list">
+      <div id="today-panel" class="today-tasks-list" role="region" aria-label={i18n.todayTasks?.title || "Today's Tasks"}>
         {#each todayTasks() as task (task.id)}
-          <TaskItemComponent {task} showMeta={false} onTaskUpdated={onTaskUpdated} />
+          <div role="listitem">
+            <TaskItemComponent {task} showMeta={false} onTaskUpdated={onTaskUpdated} />
+          </div>
         {/each}
       </div>
     {/if}
@@ -153,8 +171,11 @@
 
 <!-- Always-visible drop zone (compact by default, expands on drag) -->
 <div 
-  class="today-drop-zone {isDragOver || isDragging ? 'active' : 'compact'}" 
-  role="region" 
+  class="today-drop-zone {isDragOver || isDragging ? 'active' : 'compact'}"
+  role="region"
+  aria-label={i18n.todayTasks?.addToToday || "Today's tasks drop zone"}
+  aria-describedby="today-drop-hint"
+  aria-busy={isDragOver}
   ondragover={handleDragOver}
   ondragleave={handleDragLeave}
   ondrop={handleDrop}
@@ -164,7 +185,7 @@
       <use href="#iconCalendar"></use>
     </svg>
     <span class="drop-title">{i18n.todayTasks?.title || "Today's Tasks"}</span>
-    <span class="drop-hint">{i18n.todayTasks?.addToToday || 'Drop tasks here to add to today'}</span>
+    <span id="today-drop-hint" class="drop-hint">{i18n.todayTasks?.addToToday || 'Drop tasks here to add to today'}</span>
   </div>
 </div>
 
@@ -196,6 +217,22 @@
     font-weight: 600;
     font-size: 14px;
     color: var(--b3-theme-on-surface);
+  }
+
+  .tree-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+  }
+
+  .chevron {
+    transition: transform 0.2s ease;
+    fill: var(--b3-theme-on-surface-variant);
+  }
+  .chevron.expanded {
+    transform: rotate(90deg);
   }
 
   .task-count {
