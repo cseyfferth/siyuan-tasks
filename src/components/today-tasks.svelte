@@ -93,24 +93,19 @@
     }
   });
 
-  // Handle drag over event
+  // Handle drag over/leave/drop on header (drop zone)
   function handleDragOver(event: DragEvent) {
     event.preventDefault();
     isDragOver = true;
   }
-
-  // Handle drag leave event
   function handleDragLeave(event: DragEvent) {
     event.preventDefault();
     isDragOver = false;
   }
-
-  // Handle drop event
   async function handleDrop(event: DragEvent) {
     event.preventDefault();
     isDragOver = false;
-    isDragging = false; // Also set isDragging to false when drop happens
-
+    isDragging = false;
     const taskId = event.dataTransfer?.getData('text/plain');
     if (taskId) {
       try {
@@ -127,66 +122,51 @@
   }
 </script>
 
-{#if hasTodayTasks()}
-  <div class="today-tasks-section">
-    <div
-      class="today-header"
-      role="button"
-      tabindex="0"
-      aria-expanded={isExpanded}
-      aria-controls="today-panel"
-      onclick={toggleExpanded}
-      onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), toggleExpanded())}
-    >
-      <div class="today-title" role="heading" aria-level="4">
-        <div class="tree-toggle">
-          <svg class="chevron {isExpanded ? 'expanded' : ''}" width="12" height="12">
-            <use href="#iconRight" />
-          </svg>
-        </div>
-        <svg class="icon" width="16" height="16">
-          <use href="#iconCalendar"></use>
-        </svg>
-        <span>{i18n.todayTasks?.title || "Today's Tasks"}</span>
-        <span class="task-count">({todayTasks().length})</span>
-      </div>
-      <div class="expand-icon" aria-hidden="true">
-        <svg class="icon" width="12" height="12">
-          <use href={isExpanded ? "#iconChevronUp" : "#iconChevronDown"}></use>
+<div class="today-tasks-section">
+  <div
+    class="today-header {isDragOver || isDragging ? 'drag-over' : ''}"
+    role="button"
+    tabindex="0"
+    aria-expanded={isExpanded}
+    aria-controls="today-panel"
+    aria-label={i18n.todayTasks?.addToToday || "Today's tasks drop zone"}
+    aria-describedby="today-drop-hint"
+    aria-busy={isDragOver}
+    onclick={toggleExpanded}
+    onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), toggleExpanded())}
+    ondragover={handleDragOver}
+    ondragleave={handleDragLeave}
+    ondrop={handleDrop}
+  >
+    <div class="today-title" role="heading" aria-level="4">
+      <div class="tree-toggle">
+        <svg class="chevron {isExpanded ? 'expanded' : ''}" width="12" height="12">
+          <use href="#iconRight" />
         </svg>
       </div>
+      <svg class="icon" width="16" height="16">
+        <use href="#iconCalendar"></use>
+      </svg>
+      <span>{i18n.todayTasks?.title || "Today's Tasks"}</span>
+      <span class="task-count">({todayTasks().length})</span>
+      <span id="today-drop-hint" class="visually-hidden">{i18n.todayTasks?.addToToday || 'Drop tasks here to add to today'}</span>
     </div>
-    
-    {#if isExpanded}
-      <div id="today-panel" class="today-tasks-list" role="region" aria-label={i18n.todayTasks?.title || "Today's Tasks"}>
-        {#each todayTasks() as task (task.id)}
-          <div role="listitem">
-            <TaskItemComponent {task} showMeta={false} onTaskUpdated={onTaskUpdated} />
-          </div>
-        {/each}
-      </div>
-    {/if}
+    <div class="expand-icon" aria-hidden="true">
+      <svg class="icon" width="12" height="12">
+        <use href={isExpanded ? "#iconChevronUp" : "#iconChevronDown"}></use>
+      </svg>
+    </div>
   </div>
-{/if}
-
-<!-- Always-visible drop zone (compact by default, expands on drag) -->
-<div 
-  class="today-drop-zone {isDragOver || isDragging ? 'active' : 'compact'}"
-  role="region"
-  aria-label={i18n.todayTasks?.addToToday || "Today's tasks drop zone"}
-  aria-describedby="today-drop-hint"
-  aria-busy={isDragOver}
-  ondragover={handleDragOver}
-  ondragleave={handleDragLeave}
-  ondrop={handleDrop}
->
-  <div class="drop-zone-content">
-    <svg class="icon" width="16" height="16">
-      <use href="#iconCalendar"></use>
-    </svg>
-    <span class="drop-title">{i18n.todayTasks?.title || "Today's Tasks"}</span>
-    <span id="today-drop-hint" class="drop-hint">{i18n.todayTasks?.addToToday || 'Drop tasks here to add to today'}</span>
-  </div>
+  
+  {#if isExpanded && hasTodayTasks()}
+    <div id="today-panel" class="today-tasks-list" role="region" aria-label={i18n.todayTasks?.title || "Today's Tasks"}>
+      {#each todayTasks() as task (task.id)}
+        <div role="listitem">
+          <TaskItemComponent {task} showMeta={false} onTaskUpdated={onTaskUpdated} />
+        </div>
+      {/each}
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -203,7 +183,12 @@
     background: var(--b3-theme-surface);
     border-radius: 4px 4px 0 0;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    border: 2px dashed transparent;
+  }
+  .today-header.drag-over {
+    border-color: var(--b3-theme-primary);
+    background: var(--b3-theme-primary-container);
   }
 
   .today-header:hover {
@@ -259,52 +244,15 @@
     margin-bottom: 0;
   }
 
-  /* Always-visible, sticky drop zone */
-  .today-drop-zone {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-radius: 4px;
-    transition: all 0.18s ease;
-    margin-bottom: 12px;
-    border: 2px dashed transparent;
-    background: transparent;
-    backdrop-filter: blur(4px);
-  }
-
-  .today-drop-zone.compact {
-    padding: 4px 8px; /* very compact */
-    min-height: 6px; /* thin bar */
-    border-color: transparent;
-  }
-
-  .today-drop-zone.compact .drop-zone-content {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    opacity: 0.45;
-    font-size: 11px;
-    color: var(--b3-theme-on-surface-variant);
-  }
-
-  /* Hide hint text in compact mode to save space */
-  .today-drop-zone.compact .drop-hint {
-    display: none;
-  }
-
-  .today-drop-zone.active {
-    padding: 16px;
-    border-color: var(--b3-theme-primary);
-    background: var(--b3-theme-primary-container);
-  }
-
-  .today-drop-zone .drop-zone-content {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .today-drop-zone .drop-title {
-    font-weight: 600;
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 </style>
