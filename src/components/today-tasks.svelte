@@ -1,26 +1,42 @@
 <script lang="ts">
   import { type I18N } from '../types/i18n';
-  import { type TaskItem } from '../types/tasks';
+  import { TaskStatus, type TaskItem } from '../types/tasks';
   import TaskItemComponent from './task-item.svelte';
   import { onMount, onDestroy } from 'svelte';
   import { i18nStore } from '@/stores/i18n.store';
   import { taskStore } from '@/stores/task.store';
+  import { configStore } from '@/stores/config.store';
 
   interface Props {
     tasks: TaskItem[];
+    searchText?: string;
     isExpanded?: boolean;
     onToggleExpanded?: () => void;
     onTaskUpdated?: () => void;
   }
 
-  let { tasks, isExpanded = true, onToggleExpanded, onTaskUpdated }: Props = $props();
+  let { tasks, searchText = '', isExpanded = true, onToggleExpanded, onTaskUpdated }: Props = $props();
 
   // Globals
   let i18n = $derived($i18nStore as I18N);
+  let showCompleted = $derived($configStore.showCompleted);
+  let sortBy = $derived($configStore.sortBy);
 
   // Filter tasks that are marked for today
   let todayTasks = $derived(() => {
-    return tasks.filter(task => task.isToday === true);
+    let list = tasks.filter(task => task.isToday === true);
+    // Apply search filter
+    if (searchText) {
+      const q = searchText.toLowerCase();
+      list = list.filter(t => t.fcontent.toLowerCase().includes(q));
+    }
+    // Apply completed visibility
+    if (!showCompleted) {
+      list = list.filter(t => t.status !== TaskStatus.DONE);
+    }
+    // Sort according to settings
+    list = taskStore.sortTasks(list, sortBy);
+    return list;
   });
 
   // Check if there are any today tasks

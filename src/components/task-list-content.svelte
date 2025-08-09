@@ -93,6 +93,7 @@
     {#if showTodayTasks}
       <TodayTasks 
         {tasks} 
+        {searchText}
         onTaskUpdated={handleTaskUpdated}
       />
     {/if}
