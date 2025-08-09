@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { type I18N } from '../types/i18n';
   import { type TaskItem } from '../types/tasks';
   import TaskItemComponent from './task-item.svelte';
-  import { TaskMetadataService } from '../services/task-metadata.service';
   import { onMount, onDestroy } from 'svelte';
   import { i18nStore } from '@/stores/i18n.store';
+  import { taskStore } from '@/stores/task.store';
 
   interface Props {
     tasks: TaskItem[];
@@ -14,8 +15,8 @@
 
   let { tasks, isExpanded = true, onToggleExpanded, onTaskUpdated }: Props = $props();
 
-  // Globals from stores
-  let i18n = $derived($i18nStore);
+  // Globals
+  let i18n = $derived($i18nStore as I18N);
 
   // Filter tasks that are marked for today
   let todayTasks = $derived(() => {
@@ -98,7 +99,7 @@
     const taskId = event.dataTransfer?.getData('text/plain');
     if (taskId) {
       try {
-        await TaskMetadataService.addTaskToToday(taskId);
+        await taskStore.addTaskToToday(taskId);
         onTaskUpdated?.();
       } catch (error) {
         console.error('Failed to add task to today:', error);
@@ -109,7 +110,7 @@
 
 {#if hasTodayTasks()}
   <div class="today-tasks-section">
-    <div class="today-header" onclick={onToggleExpanded}>
+    <div class="today-header" onclick={onToggleExpanded} onkeydown={(e) => e.key === 'Enter' && onToggleExpanded?.()} role="button" tabindex="0">
       <div class="today-title">
         <svg class="icon" width="16" height="16">
           <use href="#iconCalendar"></use>
@@ -136,7 +137,8 @@
 
 <!-- Always-visible drop zone (compact by default, expands on drag) -->
 <div 
-  class="today-drop-zone {isDragOver || isDragging ? 'active' : 'compact'}"
+  class="today-drop-zone {isDragOver || isDragging ? 'active' : 'compact'}" 
+  role="region" 
   ondragover={handleDragOver}
   ondragleave={handleDragLeave}
   ondrop={handleDrop}

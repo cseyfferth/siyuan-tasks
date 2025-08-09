@@ -9,6 +9,21 @@ import { NotebookService } from "./notebook.service";
 
 export class TaskProcessingService {
   /**
+   * Split tasks into today and regular lists
+   */
+  static splitToday(tasks: TaskItem[]): {
+    today: TaskItem[];
+    rest: TaskItem[];
+  } {
+    const today: TaskItem[] = [];
+    const rest: TaskItem[] = [];
+    for (const t of tasks) {
+      (t.isToday ? today : rest).push(t);
+    }
+    return { today, rest };
+  }
+
+  /**
    * Compare two task arrays to see if they've changed
    */
   static hasTasksChanged(
@@ -30,7 +45,8 @@ export class TaskProcessingService {
         current.markdown !== newTask.markdown ||
         current.status !== newTask.status ||
         current.priority !== newTask.priority ||
-        current.updated !== newTask.updated
+        current.updated !== newTask.updated ||
+        (current.isToday ?? false) !== (newTask.isToday ?? false)
       ) {
         return true;
       }

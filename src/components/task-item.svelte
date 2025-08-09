@@ -2,9 +2,9 @@
   import { openTab } from 'siyuan';
   import { type TaskItem } from '../types/tasks';
   import { TaskStatus, TaskPriority } from '../types/tasks';
-  import { TaskMetadataService } from '../services/task-metadata.service';
   import ContextMenu from './ui/context-menu.svelte';
   import { i18nStore } from '@/stores/i18n.store';
+  import { taskStore } from '@/stores/task.store';
   import { appStore } from '@/stores/app.store';
 
   interface Props {
@@ -84,9 +84,9 @@
         action: async () => {
           try {
             if (isToday) {
-              await TaskMetadataService.removeTaskFromToday(task.id);
+              await taskStore.removeTaskFromToday(task.id);
             } else {
-              await TaskMetadataService.addTaskToToday(task.id);
+              await taskStore.addTaskToToday(task.id);
             }
             onTaskUpdated?.();
           } catch (error) {
