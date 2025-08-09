@@ -20,6 +20,7 @@ describe("Task Filtering and Sorting", () => {
       autoRefresh: true,
       refreshInterval: 30,
       showCompleted: true,
+      showTodayTasks: true,
       maxTasks: 100,
       sortBy: "created",
       displayMode: "only_tasks" as any,

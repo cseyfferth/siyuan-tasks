@@ -1,4 +1,4 @@
-import { getFile, putFile, readDir, removeFile } from "../api";
+import { getFile, putFile, readDir, removeFile, ReadDirEntry } from "../api";
 import { Logger } from "./logger.service";
 
 export interface TodayTaskData {
@@ -24,7 +24,6 @@ export class TaskMetadataService {
       const filePath = this.getTaskFilePath(taskId);
       const data = await getFile<TodayTaskData>(filePath);
       const result = Boolean(data && data.isToday === true);
-      Logger.debug("isTaskToday", { taskId, filePath, result });
       return result;
     } catch (error) {
       // File doesn't exist or other error - task is not today
@@ -51,7 +50,6 @@ export class TaskMetadataService {
         false,
         new Blob([JSON.stringify(data)], { type: "application/json" })
       );
-      Logger.info(`Added task ${taskId} to today's tasks`, { filePath });
     } catch (error) {
       Logger.error(`Failed to add task ${taskId} to today's tasks:`, error);
       throw error;
@@ -65,7 +63,6 @@ export class TaskMetadataService {
     try {
       const filePath = this.getTaskFilePath(taskId);
       await removeFile(filePath);
-      Logger.info(`Removed task ${taskId} from today's tasks`, { filePath });
     } catch (error) {
       Logger.error(
         `Failed to remove task ${taskId} from today's tasks:`,
@@ -95,13 +92,7 @@ export class TaskMetadataService {
    */
   static async loadTodayTaskIds(): Promise<string[]> {
     try {
-      Logger.debug("loadTodayTaskIds: reading dir", {
-        base: this.STORAGE_BASE_PATH,
-      });
-      const dirData = await readDir(this.STORAGE_BASE_PATH);
-      // readDir returns the inner data directly via request(), so dirData is already the array of entries
-      const entries = Array.isArray(dirData) ? dirData : [];
-      Logger.debug("loadTodayTaskIds: dir entries", { count: entries.length });
+      const entries: ReadDirEntry[] = await readDir(this.STORAGE_BASE_PATH);
       if (entries.length === 0) {
         return [];
       }
@@ -120,30 +111,20 @@ export class TaskMetadataService {
         // Extract task ID from filename: task-<id>.json => <id>
         const taskId = item.name.replace(/^task-/, "").replace(/\.json$/, "");
         const filePath = `${this.STORAGE_BASE_PATH}/${item.name}`;
-        Logger.debug("loadTodayTaskIds: candidate", {
-          name: item.name,
-          taskId,
-          filePath,
-        });
 
         // Verify the file contains valid today task data
         try {
           const data = await getFile<TodayTaskData>(filePath);
-          const valid = Boolean(data && (data as any).isToday === true);
-          Logger.debug("loadTodayTaskIds: file data", { taskId, valid });
+          const valid = Boolean(data && data.isToday === true);
           if (valid) {
             todayTaskIds.push(taskId);
           }
-        } catch (error) {
+        } catch (error: unknown) {
           // Skip invalid files
-          Logger.warn(`Invalid today task file: ${item.name}`);
+          Logger.warn(`Invalid today task file: ${item.name}; ${error}`);
         }
       }
 
-      Logger.info("loadTodayTaskIds: result", {
-        count: todayTaskIds.length,
-        idsSample: todayTaskIds.slice(0, 10),
-      });
       return todayTaskIds;
     } catch (error) {
       // Directory doesn't exist yet - no today tasks

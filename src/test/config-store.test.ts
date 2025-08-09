@@ -17,6 +17,7 @@ describe("Config Store", () => {
       maxTasks: 100,
       sortBy: "created",
       displayMode: TaskDisplayMode.ONLY_TASKS,
+      showTodayTasks: true,
       loading: false,
     });
   });
@@ -27,6 +28,7 @@ describe("Config Store", () => {
     expect(config.autoRefresh).toBe(true);
     expect(config.refreshInterval).toBe(30);
     expect(config.showCompleted).toBe(true);
+    expect(config.showTodayTasks).toBe(true);
     expect(config.maxTasks).toBe(100);
     expect(config.sortBy).toBe("created");
     expect(config.displayMode).toBe(TaskDisplayMode.ONLY_TASKS);
@@ -40,6 +42,7 @@ describe("Config Store", () => {
       maxTasks: 200,
       sortBy: "priority",
       displayMode: TaskDisplayMode.NOTEBOOK_TASKS,
+      showTodayTasks: true,
       loading: false,
     });
 

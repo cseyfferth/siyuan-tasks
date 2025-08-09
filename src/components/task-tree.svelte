@@ -200,11 +200,4 @@
     margin-left: 1rem;
   }
 
-  .chevron {
-    transition: transform 0.2s ease;
-    fill: var(--b3-theme-on-surface-variant);
-  }
-  .chevron.expanded {
-    transform: rotate(90deg);
-  }
 </style> 

@@ -20,7 +20,7 @@
   let showContextMenu = $state(false);
   let contextMenuX = $state(0);
   let contextMenuY = $state(0);
-  let triggerElement: HTMLElement;
+  let triggerElement = $state<HTMLElement | null>(null);
 
   function handleTaskClick() {
     if (task.root_id) {
@@ -145,7 +145,7 @@
     x={contextMenuX}
     y={contextMenuY}
     onClose={closeContextMenu}
-    triggerElement={triggerElement}
+    triggerElement={triggerElement ?? undefined}
   />
 {/if}
 

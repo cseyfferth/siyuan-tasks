@@ -11,9 +11,9 @@
 
 import { fetchPost, fetchSyncPost, IWebSocketData } from "siyuan";
 
-export async function request(url: string, data: any) {
-  const response: IWebSocketData = await fetchSyncPost(url, data);
-  const res = response.code === 0 ? response.data : null;
+export async function request(url: string, data: unknown): Promise<any> {
+  const response: IWebSocketData = await fetchSyncPost(url, data as any);
+  const res = response.code === 0 ? (response.data as any) : null;
   return res;
 }
 
@@ -21,6 +21,22 @@ export interface ApiError {
   code: number;
   msg: string;
 }
+
+function isApiError(value: unknown): value is ApiError {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "code" in (value as Record<string, unknown>) &&
+    typeof (value as Record<string, unknown>).code === "number"
+  );
+}
+
+export type ReadDirEntry = {
+  isDir: boolean;
+  isSymlink: boolean;
+  name: string;
+  updated?: number;
+};
 
 // **************************************** Noteboook ****************************************
 
@@ -364,14 +380,16 @@ export async function renderSprig(template: string): Promise<string> {
 
 // **************************************** File ****************************************
 
-export async function getFile<T>(path: string): Promise<T | ApiError> {
-  const data = {
-    path: path,
-  };
+export async function getFile<T>(path: string): Promise<T> {
+  const data = { path };
   const url = "/api/file/getFile";
-  return new Promise<T>((resolve, _) => {
-    fetchPost(url, data, (content: any) => {
-      resolve(content);
+  return new Promise<T>((resolve, reject) => {
+    fetchPost(url, data, (content: unknown) => {
+      if (isApiError(content)) {
+        reject(new Error(content.msg ?? "ApiError"));
+        return;
+      }
+      resolve(content as T);
     });
   });
 }
@@ -416,12 +434,10 @@ export async function removeFile(path: string) {
   return request(url, data);
 }
 
-export async function readDir(path: string): Promise<IResReadDir> {
-  const data = {
-    path: path,
-  };
+export async function readDir(path: string): Promise<ReadDirEntry[]> {
+  const data = { path };
   const url = "/api/file/readDir";
-  return request(url, data);
+  return request(url, data) as Promise<ReadDirEntry[]>;
 }
 
 // **************************************** Export ****************************************

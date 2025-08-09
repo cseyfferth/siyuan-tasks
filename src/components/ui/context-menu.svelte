@@ -19,7 +19,7 @@
   let { items, x, y, onClose, triggerElement }: Props = $props();
 
   let menuElement: HTMLElement;
-  let hideTimer: NodeJS.Timeout;
+  let hideTimer: ReturnType<typeof setTimeout>;
   let isMouseInMenu = $state(false);
   let isMouseInTrigger = $state(false);
 
@@ -89,11 +89,13 @@
   bind:this={menuElement}
   class="context-menu"
   style="left: {x}px; top: {y}px;"
+  role="menu"
+  tabindex="0"
   onmouseenter={() => { isMouseInMenu = true; stopHideTimer(); }}
   onmouseleave={() => { isMouseInMenu = false; startHideTimer(); }}
 >
   {#each items as item (item.id)}
-    <div class="menu-item" onclick={() => handleItemClick(item)}>
+    <div class="menu-item" onclick={() => handleItemClick(item)} onkeydown={(e) => e.key === 'Enter' && handleItemClick(item)} role="menuitem" tabindex="0">
       {#if item.icon}
         <svg class="menu-icon" width="14" height="14">
           <use href="#{item.icon}" />
