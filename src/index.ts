@@ -2,10 +2,11 @@ import {
   Protyle,
   Plugin,
   Model,
-  Dock,
   Dialog,
   IEventBusMap,
   IPluginDockTab,
+  Custom,
+  MobileCustom,
 } from "siyuan";
 import "@/index.scss";
 
@@ -33,7 +34,7 @@ type TEventSwitchProtyle = CustomEvent<
 
 export default class TaskListPlugin extends Plugin {
   customTab: () => Model;
-  private taskDock: { config: IPluginDockTab; model: Dock };
+  private taskDock: { config: IPluginDockTab; model: Custom | MobileCustom };
   private refreshTimer: NodeJS.Timeout | null = null;
 
   async onload() {
@@ -48,7 +49,7 @@ export default class TaskListPlugin extends Plugin {
         // Toggle the task list dock
         if (this.taskDock && this.taskDock.model.element) {
           // This will toggle the dock visibility
-          const el = this.taskDock.model.element;
+          const el = this.taskDock.model.element as unknown as HTMLElement;
           el.style.display = el.style.display === "none" ? "block" : "none";
         }
       },
@@ -83,13 +84,13 @@ export default class TaskListPlugin extends Plugin {
       update() {
         // console.log("Task list dock update");
       },
-      init: (dockInstance: Dock) => {
+      init(dock) {
         // Create Svelte view for task list
         mount(TaskListView, {
-          target: dockInstance.element,
+          target: dock.element,
           props: {
-            app: this.app,
-            i18n: this.i18n as unknown as I18N,
+            app: (this as any).app,
+            i18n: (this as any).i18n as unknown as I18N,
           },
         });
       },
