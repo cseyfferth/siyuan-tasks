@@ -84,13 +84,12 @@ export default class TaskListPlugin extends Plugin {
       update() {
         // console.log("Task list dock update");
       },
-      init(dock) {
-        // Create Svelte view for task list
+      init: (dock) => {
         mount(TaskListView, {
           target: dock.element,
           props: {
-            app: (this as any).app,
-            i18n: (this as any).i18n as unknown as I18N,
+            app: this.app,
+            i18n: this.i18n as unknown as I18N,
           },
         });
       },
