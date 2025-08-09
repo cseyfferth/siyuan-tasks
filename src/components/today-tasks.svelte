@@ -6,6 +6,7 @@
   import { i18nStore } from '@/stores/i18n.store';
   import { taskStore } from '@/stores/task.store';
   import { configStore } from '@/stores/config.store';
+  import Chevron from '@/components/ui/chevron.svelte';
 
   interface Props {
     tasks: TaskItem[];
@@ -140,9 +141,7 @@
   >
     <div class="today-title" role="heading" aria-level="4">
       <div class="tree-toggle">
-        <svg class="chevron {isExpanded ? 'expanded' : ''}" width="12" height="12">
-          <use href="#iconRight" />
-        </svg>
+        <Chevron expanded={isExpanded} />
       </div>
       <svg class="icon" width="16" height="16">
         <use href="#iconCalendar"></use>
@@ -171,8 +170,7 @@
 
 <style>
   .today-tasks-section {
-    border-bottom: 1px solid var(--b3-border-color);
-    margin-bottom: 12px;
+    margin-bottom: 0.1rem;
   }
 
   .today-header {
@@ -212,14 +210,6 @@
     height: 12px;
   }
 
-  .chevron {
-    transition: transform 0.2s ease;
-    fill: var(--b3-theme-on-surface-variant);
-  }
-  .chevron.expanded {
-    transform: rotate(90deg);
-  }
-
   .task-count {
     font-weight: normal;
     color: var(--b3-theme-on-surface-variant);
@@ -231,7 +221,7 @@
   }
 
   .today-tasks-list {
-    padding: 8px 0;
+    padding: 0 1.4rem;
     background: var(--b3-theme-surface-variant);
     border-radius: 0 0 4px 4px;
   }

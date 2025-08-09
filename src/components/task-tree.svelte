@@ -2,6 +2,7 @@
   import { type GroupedTasks, TaskDisplayMode } from '../types/tasks';
   import TaskItemComponent from './task-item.svelte';
   import { NotebookService } from '../services/notebook.service';
+  import Chevron from '@/components/ui/chevron.svelte';
 
   interface Props {
     groupedTasks: GroupedTasks;
@@ -71,9 +72,7 @@
         aria-expanded={expandedNotebooks.has(boxId)}
       >
         <div class="tree-toggle">
-          <svg class="chevron{expandedNotebooks.has(boxId) ? ' expanded' : ''}" width="12" height="12" viewBox="0 0 12 12">
-            <path d="M4 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+          <Chevron expanded={expandedNotebooks.has(boxId)} />
         </div>
         <div class="tree-icon">
           {#await NotebookService.getNotebookIcon(boxId) then icon}
@@ -112,9 +111,7 @@
                   aria-expanded={expandedDocuments.has(docId)}
                 >
                   <div class="tree-toggle">
-                        <svg class="chevron {expandedDocuments.has(docId) ? 'expanded' : ''}" width="12" height="12">
-                          <use href="#iconRight" />
-                        </svg>
+                    <Chevron expanded={expandedDocuments.has(docId)} />
                   </div>
                   <div class="tree-icon">
                     {#await NotebookService.getDocumentIcon(docId) then icon}
