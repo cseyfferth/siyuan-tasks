@@ -14,7 +14,6 @@
 
   // Initialize globals
   appStore.set(app);
-  i18nStore.set(i18n);
 
   let ready = $derived(Boolean($appStore && $i18nStore));
 </script>

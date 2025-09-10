@@ -11,8 +11,6 @@
 
   let { i18n, plugin }: Props = $props();
 
-  i18nStore.set(i18n);
-
   let ready = $derived(Boolean($i18nStore));
 </script>
 
