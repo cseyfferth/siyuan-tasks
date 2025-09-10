@@ -1,0 +1,74 @@
+{
+  "cancel": "Abbrechen",
+  "save": "Speichern",
+  "name": "SiYuan",
+  "dockTitle": "Alle Aufgaben",
+  "refreshTasks": "Aufgaben aktualisieren",
+  "noTasksFound": "Keine Aufgaben gefunden.",
+  "errorFetchingTasks": "Fehler beim Abrufen der Aufgaben:",
+  "errorFetchingNotebookInfo": "Fehler beim Abrufen der Notizbuch-Informationen für Aufgabe:",
+  "errorFetchingDocumentPath": "Fehler beim Abrufen des Dokumentpfads für Aufgabe:",
+  "pluginTitle": "Aufgabenliste",
+  "todayTasks": {
+    "title": "Heutige Aufgaben",
+    "addToToday": "Zu heutigen Aufgaben hinzufügen",
+    "removeFromToday": "Aus heutigen Aufgaben entfernen"
+  },
+  "options": {
+    "refresh": "Aktualisieren",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "expand": "Erweitern",
+    "collapse": "Reduzieren"
+  },
+  "wait": "Signalisiere, dass diese Aufgabe später erledigt wird",
+  "getTab": "Tab erhalten",
+  "range": {
+    "doc": "Dokument",
+    "box": "Notizbuch",
+    "workspace": "Arbeitsbereich"
+  },
+  "searchPlaceholder": "Aufgaben suchen...",
+  "priority": {
+    "urgent": "Dringend",
+    "high": "Hoch",
+    "normal": "Normal",
+    "wait": "Warten",
+    "none": "Keine Priorität",
+    "indicators": {
+      "urgent": "‼️ (tippe :!!)",
+      "high": "❗ (tippe :!)",
+      "wait": "⏳ (tippe /wait)"
+    }
+  },
+  "setting": {
+    "title": "Einstellungen",
+    "general": "Allgemein",
+    "layout": "Layout",
+    "autoRefresh": "Automatisches Aktualisieren der Aufgaben",
+    "autoRefreshDesc": "Aufgaben automatisch aktualisieren beim Wechseln des Dokuments",
+    "refreshInterval": "Aktualisierungsintervall (Sekunden)",
+    "refreshIntervalDesc": "Wie oft Aufgaben automatisch aktualisiert werden. Minimum sind 5 Sekunden.",
+    "showCompleted": "Abgeschlossene Aufgaben anzeigen",
+    "showCompletedDesc": "Abgeschlossene Aufgaben in der Aufgabenliste anzeigen",
+    "maxTasks": "Maximale Anzahl angezeigter Aufgaben",
+    "maxTasksDesc": "Ändere dies, wenn du viele Aufgaben hast und nicht alle angezeigt werden.",
+    "sortBy": "Sortieren nach",
+    "sortByDesc": "Wie Aufgaben in der Liste sortiert werden",
+    "sortOptions": {
+      "created": "Erstellungsdatum",
+      "updated": "Aktualisierungsdatum",
+      "content": "Inhalt",
+      "priority": "Priorität"
+    },
+    "displayMode": "Anzeige-Modus der Aufgabenliste",
+    "displayModeDesc": "Wie Aufgaben in der Liste angezeigt werden",
+    "displayOptions": {
+      "onlyTasks": "Nur Aufgaben",
+      "notebookDocumentTasks": "Notizbuch, Dokument, Aufgaben",
+      "notebookTasks": "Notizbuch, Aufgaben"
+    },
+    "showTodayTasks": "Heutige Aufgaben anzeigen",
+    "showTodayTasksDesc": "Zeige einen separaten Bereich für heutige Aufgaben oben in der Liste"
+  }
+}
